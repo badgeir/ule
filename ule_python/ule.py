@@ -1,4 +1,7 @@
 
+# Author: Peter Leupi
+# UDP interface between Unity learning environment and python
+
 import numpy as np
 
 from matplotlib import pyplot as plt
@@ -10,7 +13,7 @@ import sys
 
 import io
 
-class EnvironmentIface:
+class ULEIface:
     def __init__(self, hostIP="127.0.0.1", actionPort=3000, imagePort=3001, rewardPort=3002, statusPort=3003):
         self.hostIP = "127.0.0.1"
         self.actionPort = actionPort
@@ -43,11 +46,10 @@ class EnvironmentIface:
         img = None
         try:
             img = mpimg.imread(io.BytesIO(imgbytes))
-            img = img[:,:,0]
         except Exception as e:
             print('not an image')
         
-        reward = int(rewardstr)
+        reward = float(rewardstr)
         status = int(statusstr)
 
         return img, reward, status

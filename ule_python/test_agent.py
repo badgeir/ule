@@ -4,7 +4,7 @@ import time
 import ule
 
 def main():
-    env = ule.EnvironmentIface()
+    env = ule.ULEIface()
 
     starttime = time.clock()
     while True:
