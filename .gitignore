@@ -2,3 +2,5 @@
 *.sln
 unityproj/Library
 unityproj/Temp
+unityproj/obj
+*.csproj
