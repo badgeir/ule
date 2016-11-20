@@ -4,3 +4,4 @@ unityproj/Library
 unityproj/Temp
 unityproj/obj
 *.csproj
+*.suo

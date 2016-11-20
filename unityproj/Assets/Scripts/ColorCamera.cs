@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ColorCamera : MonoBehaviour 
+public class ColorCamera : VirtualCamera 
 {
 
     public RenderTexture mRenderTexture;
@@ -14,7 +14,7 @@ public class ColorCamera : MonoBehaviour
         mDimY = mRenderTexture.height;
     }
 
-    public byte[] GetImageBytes()
+    public override byte[] GetImageBytes()
     {
         //GetComponent<Camera>().Render();
         RenderTexture.active = mRenderTexture;

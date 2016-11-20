@@ -3,7 +3,6 @@ using System.Collections;
 
 public class ReinforcementAgent : MonoBehaviour {
 
-    SceneManager mSceneManager;
     ReinforcementAgentInterface mIface;
 
     private bool mActionAvailable;
@@ -14,7 +13,6 @@ public class ReinforcementAgent : MonoBehaviour {
         mActionAvailable = false;
         mAction = "";
 
-        mSceneManager = GameObject.Find("SceneManager").GetComponent<SceneManager>();
         mIface = new ReinforcementAgentInterface("127.0.0.1", 3000, 3001, 3002, 3003, ReceiveAction);
 	}
 

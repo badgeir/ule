@@ -3,7 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Xml.Serialization;
 
-public class DepthCamera : MonoBehaviour 
+public class DepthCamera : VirtualCamera 
 {
     public RenderTexture mRenderTexture;
 	public Material mDepthMaterial;
@@ -24,7 +24,7 @@ public class DepthCamera : MonoBehaviour
         Graphics.Blit(source, destination, mDepthMaterial);
 	}
 
-    public byte[] GetImageBytes()
+    public override byte[] GetImageBytes()
     {
         //GetComponent<Camera>().Render();
         RenderTexture.active = mRenderTexture;

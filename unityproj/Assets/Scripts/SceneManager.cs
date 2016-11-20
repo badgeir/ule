@@ -6,14 +6,12 @@ public class SceneManager : MonoBehaviour {
     enum GameStatus {StatusOK, GameOver};
 
     public ReinforcementAgent mAgent;
-    DepthCamera mCamera;
+    public VirtualCamera mCamera;
 
     float mAccumulatedReward;
     GameStatus mGameStatus;
 
     void Start () {
-        mCamera = GameObject.Find("VirtualKinect").GetComponent<DepthCamera>();
-
         mGameStatus = GameStatus.StatusOK;
         mAccumulatedReward = 0;
     }
@@ -25,9 +23,9 @@ public class SceneManager : MonoBehaviour {
             mAgent.set_action_available(false);
 
             string actionstr = mAgent.GetActionString();
-            float action = float.Parse(actionstr);
 
             byte[] imagebytes = mCamera.GetImageBytes();
+            Debug.Log("send");
             mAgent.SendReinforcementFeedback(imagebytes, mAccumulatedReward, (int)mGameStatus);
         }
     }

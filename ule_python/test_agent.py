@@ -1,6 +1,8 @@
 import numpy as np
 import time
+import sys
 
+from matplotlib import pyplot as plt
 import ule
 
 def main():
@@ -12,6 +14,7 @@ def main():
             img, reward, status = env.step(0)
 
             print (img.shape)
+            print(img.dtype)
             print(reward)
             print(status)
 

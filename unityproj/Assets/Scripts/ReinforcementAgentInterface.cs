@@ -13,7 +13,7 @@ public class ReinforcementAgentInterface
     Thread mReceiveThread;
     public string mLatestAction;
 
-    UdpClient mImageSender, mRewardSender, mGameOverSender; 
+    UdpClient mSender; 
     UdpClient mActionReceiver;
     IPEndPoint mCameraEndPoint, mRewardEndPoint, mGameStatusEndPoint;
     string mHostIP = "127.0.0.1";
@@ -43,9 +43,7 @@ public class ReinforcementAgentInterface
         mRewardEndPoint = new IPEndPoint(IPAddress.Parse(mHostIP), mRewardPort);
         mGameStatusEndPoint = new IPEndPoint(IPAddress.Parse(mHostIP), mGameStatusPort);
 
-        mImageSender = new UdpClient();
-        mRewardSender = new UdpClient();
-        mGameOverSender = new UdpClient();
+        mSender = new UdpClient();
 
         //receiver
         mReceiveThread = new Thread(new ThreadStart(ReceiveData));
@@ -57,7 +55,7 @@ public class ReinforcementAgentInterface
     {
         try
         {
-            mImageSender.Send(bytes, bytes.Length, mCameraEndPoint);
+            mSender.Send(bytes, bytes.Length, mCameraEndPoint);
         }
         catch (Exception err)
         {
@@ -70,7 +68,7 @@ public class ReinforcementAgentInterface
         try
         {
             byte[] bytes = Encoding.UTF8.GetBytes(reward.ToString());
-            mRewardSender.Send(bytes, bytes.Length, mRewardEndPoint);
+            mSender.Send(bytes, bytes.Length, mRewardEndPoint);
         }
         catch (Exception err)
         {
@@ -83,7 +81,7 @@ public class ReinforcementAgentInterface
         try
         {
             byte[] bytes = Encoding.UTF8.GetBytes(status.ToString());
-            mRewardSender.Send(bytes, bytes.Length, mGameStatusEndPoint);
+            mSender.Send(bytes, bytes.Length, mGameStatusEndPoint);
         }
         catch (Exception err)
         {
@@ -107,7 +105,7 @@ public class ReinforcementAgentInterface
                 if (data != null)
                 {
                     mLatestAction = Encoding.UTF8.GetString(data);
-                    int a = mReceiveAction(mLatestAction);
+                    mReceiveAction(mLatestAction);
                 }
 
             }
