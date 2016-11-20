@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5bb6be55d5c978a4eb15b6b4379240fd
+timeCreated: 1457463734
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - RenderTextureMain: {instanceID: 0}
+  - mat: {fileID: 2100000, guid: b8339d4396454404c87005da7931e699, type: 2}
+  - cam: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
