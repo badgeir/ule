@@ -16,7 +16,7 @@ public class ColorCamera : VirtualCamera
 
     public override byte[] GetImageBytes()
     {
-        //GetComponent<Camera>().Render();
+        GetComponent<Camera>().Render();
         RenderTexture.active = mRenderTexture;
         Texture2D tex = new Texture2D(mDimX, mDimY, TextureFormat.RGB24, false);
 

@@ -26,7 +26,7 @@ public class DepthCamera : VirtualCamera
 
     public override byte[] GetImageBytes()
     {
-        //GetComponent<Camera>().Render();
+        GetComponent<Camera>().Render();
         RenderTexture.active = mRenderTexture;
         Texture2D tex = new Texture2D(mDimX, mDimY, TextureFormat.ARGB32, false);
 

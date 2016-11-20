@@ -24,7 +24,6 @@ public class Ball : ActiveObject {
 
     void OnTriggerEnter(Collider col)
     {
-        Debug.Log("Collision!");
         if(col.tag == "Paddle")
         {
             if(mBallDirection == Vector3.left)
