@@ -40,7 +40,7 @@ class ULEIface:
         #receive feedback from environment
         imgbytes, addr = self.imageSock.recvfrom(10000)
         rewardstr, addr = self.rewardSock.recvfrom(1024)
-        statusstr, addr = self.statusSock.recvfrom(1024) 
+        statusstr, addr = self.statusSock.recvfrom(1024)
 
         img = None
         try:

@@ -13,7 +13,7 @@ public class ReinforcementAgentInterface
     Thread mReceiveThread;
     public string mLatestAction;
 
-    UdpClient mSender; 
+    UdpClient mCameraSender, mRewardSender, mGameStatusSender; 
     UdpClient mActionReceiver;
     IPEndPoint mCameraEndPoint, mRewardEndPoint, mGameStatusEndPoint;
     string mHostIP = "127.0.0.1";
@@ -43,7 +43,9 @@ public class ReinforcementAgentInterface
         mRewardEndPoint = new IPEndPoint(IPAddress.Parse(mHostIP), mRewardPort);
         mGameStatusEndPoint = new IPEndPoint(IPAddress.Parse(mHostIP), mGameStatusPort);
 
-        mSender = new UdpClient();
+        mCameraSender = new UdpClient();
+        mRewardSender = new UdpClient();
+        mGameStatusSender = new UdpClient();
 
         //receiver
         mReceiveThread = new Thread(new ThreadStart(ReceiveData));
@@ -55,7 +57,7 @@ public class ReinforcementAgentInterface
     {
         try
         {
-            mSender.Send(bytes, bytes.Length, mCameraEndPoint);
+            mCameraSender.Send(bytes, bytes.Length, mCameraEndPoint);
         }
         catch (Exception err)
         {
@@ -68,7 +70,7 @@ public class ReinforcementAgentInterface
         try
         {
             byte[] bytes = Encoding.UTF8.GetBytes(reward.ToString());
-            mSender.Send(bytes, bytes.Length, mRewardEndPoint);
+            mRewardSender.Send(bytes, bytes.Length, mRewardEndPoint);
         }
         catch (Exception err)
         {
@@ -81,7 +83,7 @@ public class ReinforcementAgentInterface
         try
         {
             byte[] bytes = Encoding.UTF8.GetBytes(status.ToString());
-            mSender.Send(bytes, bytes.Length, mGameStatusEndPoint);
+            mGameStatusSender.Send(bytes, bytes.Length, mGameStatusEndPoint);
         }
         catch (Exception err)
         {

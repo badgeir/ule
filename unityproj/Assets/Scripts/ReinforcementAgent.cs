@@ -5,7 +5,7 @@ public class ReinforcementAgent : MonoBehaviour {
 
     ReinforcementAgentInterface mIface;
 
-    private bool mActionAvailable;
+    private static bool mActionAvailable;
     private string mAction;
 
 	// Use this for initialization

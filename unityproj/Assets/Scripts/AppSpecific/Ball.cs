@@ -1,17 +1,40 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Ball : MonoBehaviour {
+public class Ball : ActiveObject {
 
-    private float mBallSpeed;
+    private float mHorizontalSpeed;
+    private float mVerticalSpeed;
+    private Vector3 mBallDirection;
 
     void Start()
     {
-        mBallSpeed = 0.3f;
+        mHorizontalSpeed = 0.01f;
+        mVerticalSpeed = 0;
+        mBallDirection = Vector3.left;
+
+        GameObject.Find("SceneManager").GetComponent<SceneManager>().AddActiveObject(this);
     }
 
 	// Update is called once per frame
-	void Update () {
-        transform.Translate(Vector3.left * mBallSpeed * Time.deltaTime);
+	public override void Tick()
+    {
+        transform.Translate((mBallDirection * mHorizontalSpeed + Vector3.up*mVerticalSpeed));
 	}
+
+    void OnTriggerEnter(Collider col)
+    {
+        Debug.Log("Collision!");
+        if(col.tag == "Paddle")
+        {
+            if(mBallDirection == Vector3.left)
+            {
+                mBallDirection = Vector3.right;
+            }
+            else 
+            {
+                mBallDirection = Vector3.left;
+            }
+        }
+    }
 }
