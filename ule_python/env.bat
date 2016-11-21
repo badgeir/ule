@@ -1,10 +1,10 @@
 REM stasjonaer
-REM set VSFORPYTHON="C:\Program Files (x86)\Common Files\Microsoft\Visual C++ for Python\9.0"
-REM set SCISOFT=C:\Scisoft
+set VSFORPYTHON="C:\Program Files (x86)\Common Files\Microsoft\Visual C++ for Python\9.0"
+set SCISOFT=C:\Scisoft
 
 REM laptop
-set VSFORPYTHON="C:\Users\nopeleu\AppData\Local\Programs\Common\Microsoft\Visual C++ for Python\9.0"
-set SCISOFT=C:\Science
+REM set VSFORPYTHON="C:\Users\nopeleu\AppData\Local\Programs\Common\Microsoft\Visual C++ for Python\9.0"
+REM set SCISOFT=C:\Science
 
 
 REM add tdm gcc stuff

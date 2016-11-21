@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using SimpleJSON;
 
 public class ReinforcementAgent : MonoBehaviour {
 
-    ReinforcementAgentInterface mIface;
+    ReinforcementAgentTCPIface mIface;
 
     private static bool mActionAvailable;
     private string mAction;
@@ -13,14 +14,13 @@ public class ReinforcementAgent : MonoBehaviour {
         mActionAvailable = false;
         mAction = "";
 
-        mIface = new ReinforcementAgentInterface("127.0.0.1", 3000, 3001, 3002, 3003, ReceiveAction);
+        mIface = new ReinforcementAgentTCPIface("127.0.0.1", 3000, 3001, 3002, ReceiveAction);
 	}
 
     public void SendReinforcementFeedback(byte[] image, float reward, int gamestatus)
     {
         mIface.SendImage(image);
-        mIface.SendReward(reward);
-        mIface.SendGameStatus(gamestatus);
+        mIface.SendInfo(reward, gamestatus);
     }
 
     public bool action_available()
