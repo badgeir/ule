@@ -83,3 +83,5 @@ class ULEIface:
     
     def close(self):
         self.actionSock.close()
+        self.imageSock.close()
+        self.infoSock.close()
