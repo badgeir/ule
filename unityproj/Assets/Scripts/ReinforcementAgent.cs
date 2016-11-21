@@ -6,17 +6,14 @@ using SimpleJSON;
 public class ReinforcementAgent : MonoBehaviour {
 
     ReinforcementAgentTCPIface mIface;
-
-    private static bool mActionAvailable;
-    private string mAction;
+    SceneManager mManager;
 
 	// Use this for initialization
     void Start()
     {
-        mActionAvailable = false;
-        mAction = "";
+        mManager = GameObject.Find("SceneManager").GetComponent<SceneManager>();
 
-        mIface = new ReinforcementAgentTCPIface("127.0.0.1", 3000, 3001, 3002, ReceiveAction);
+        mIface = new ReinforcementAgentTCPIface("127.0.0.1", 3000, 3001, 3002, mManager.QueueAction);
         StartCoroutine(ConnectToAgent());
     }
 
@@ -41,29 +38,6 @@ public class ReinforcementAgent : MonoBehaviour {
     {
         mIface.SendImage(image);
         mIface.SendInfo(reward, gamestatus, observations);
-    }
-
-    public bool action_available()
-    {
-        return mActionAvailable;
-    }
-
-    public void set_action_available(bool val)
-    {
-        mActionAvailable = val;
-    }
-
-    public string GetActionString()
-    {
-        return mAction;
-    }
-
-    // called when AgentIface receives an action
-    public int ReceiveAction(string msg)
-    {
-        mActionAvailable = true;
-        mAction = msg;
-        return 0;
     }
 
     void OnDestroy()

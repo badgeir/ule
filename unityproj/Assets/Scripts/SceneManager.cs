@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -15,21 +16,25 @@ public class SceneManager : MonoBehaviour {
     private List<TickableObject> mActiveObjects;
     private List<Observation> mObservations;
 
+    private Queue<string> mActionQueue;
+
+
     void Awake () {
         mGameStatus = GameStatus.StatusOK;
         mAccumulatedReward = 0;
+
         mActiveObjects = new List<TickableObject>();
         mObservations = new List<Observation>();
+
+        mActionQueue = new Queue<string>();
     }
 
     void Update()
     {
-        if(mAgent.action_available())
+        // check if new action has been added to queue
+        if(mActionQueue.Count > 0)
         {
-
-            mAgent.set_action_available(false);
-            string actionstr = mAgent.GetActionString();
-            Debug.Log(actionstr);
+            Debug.Log(mActionQueue.Dequeue());
 
             TickAllTickableObjects();
 
@@ -44,6 +49,16 @@ public class SceneManager : MonoBehaviour {
         {
             obj.Tick();
         }
+    }
+
+    public void QueueAction(string action)
+    {
+        mActionQueue.Enqueue(action);
+    }
+
+    string DequeueAction()
+    {
+        return mActionQueue.Dequeue();
     }
 
     public void AddActiveObject(TickableObject obj)

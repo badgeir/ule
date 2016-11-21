@@ -28,9 +28,9 @@ public class ReinforcementAgentTCPIface
     int mActionInputPort;
     int mImagePort, mInfoPort;
 
-    Func<string, int> mReceiveAction;
+    Action<string> mReceiveAction;
 
-    public ReinforcementAgentTCPIface(string hostIp, int actionport, int imageport, int infoport, Func<string, int> ReceiveActionCallback)
+    public ReinforcementAgentTCPIface(string hostIp, int actionport, int imageport, int infoport, Action<string> ReceiveActionCallback)
     {
         mActionClientConnected = false;
         mImageClientConnected = false;
