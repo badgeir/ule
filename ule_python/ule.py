@@ -19,24 +19,26 @@ class ULEIface:
         self.actionPort = actionPort
         self.imagePort = imagePort
         self.infoPort = infoPort
-
+        
         self.actionSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.actionSock.connect((self.hostIP, self.actionPort))
 
-        self.imageSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.imageSock.bind((self.hostIP, self.imagePort))
+        self.imageSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.imageSock.connect((self.hostIP, self.imagePort))
 
         self.infoSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.infoSock.bind((self.hostIP, self.infoPort))
         
-        print('Created sockets.')
+        # wait for handshake
+        self.infoSock.recvfrom(1024)
 
     def step(self, action):
         #send action
         self.actionSock.send(str(action))
 
         #receive image from environment
-        imgbytes, addr = self.imageSock.recvfrom(10000)
+        imgbytes = self.imageSock.recv(10000)
+        
         #receive other info from environment
         infostr, addr = self.infoSock.recvfrom(1024)
 

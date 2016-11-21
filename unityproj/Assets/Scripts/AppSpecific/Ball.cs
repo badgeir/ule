@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Ball : TickableObject
 {
-
     private float mHorizontalSpeed;
     private float mVerticalSpeed;
     private Vector3 mBallDirection;

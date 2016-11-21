@@ -1,4 +1,5 @@
-﻿
+﻿using UnityEngine;
+
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -12,54 +13,83 @@ using SimpleJSON;
 
 public class ReinforcementAgentTCPIface
 {
+    private bool mActionClientConnected, mImageClientConnected, mInfoClientConnected;
+
     Thread mReceiveThread;
     public string mLatestAction;
 
-    string mHostIP = "127.0.0.1";
+    string mHostIP;
 
-    TcpListener mListener;
-    TcpClient mActionReceiver;
+    TcpListener mActionListener, mImageListener;
+    TcpClient mActionClient, mImageClient;
 
-    UdpClient mCameraSender, mInfoSender;
-    IPEndPoint mCameraEndPoint, mInfoEndPoint;
+    NetworkStream mImageStream;
+
+    UdpClient mInfoSender, mImageSender;
+    IPEndPoint mInfoEndPoint, mImageEndPoint;
 
     int mActionInputPort;
-    int mCameraPort, mInfoPort;
+    int mImagePort, mInfoPort;
 
     Func<string, int> mReceiveAction;
 
-    public ReinforcementAgentTCPIface(string hostIp, int actionport, int cameraport, int infoport, Func<string, int> ReceiveAction)
+    public ReinforcementAgentTCPIface(string hostIp, int actionport, int imageport, int infoport, Func<string, int> ReceiveActionCallback)
     {
+        mActionClientConnected = false;
+        mImageClientConnected = false;
+        mInfoClientConnected = true;
+
         mHostIP = hostIp;
         mActionInputPort = actionport;
-        mCameraPort = cameraport;
+        mImagePort = imageport;
         mInfoPort = infoport;
 
-        mReceiveAction = ReceiveAction;
-
-        UdpInit();
+        mReceiveAction = ReceiveActionCallback;
     }
 
-    private void UdpInit()
+    public void Connect()
     {
-        //sender
-        mCameraEndPoint = new IPEndPoint(IPAddress.Parse(mHostIP), mCameraPort);
+        TcpInit();
+    }
+
+    public bool Connected()
+    {
+        return (mActionClientConnected && mImageClientConnected && mInfoClientConnected);
+    }
+
+    void TcpInit()
+    {
+
+        Thread imThread = new Thread(new ThreadStart(InitImageConnection));
+        imThread.IsBackground = true;
+        imThread.Start();
+
+        //mImageEndPoint = new IPEndPoint(IPAddress.Parse(mHostIP), mImagePort);
         mInfoEndPoint = new IPEndPoint(IPAddress.Parse(mHostIP), mInfoPort);
 
-        mCameraSender = new UdpClient();
+        //mImageSender = new UdpClient();
         mInfoSender = new UdpClient();
 
         //receiver
         mReceiveThread = new Thread(new ThreadStart(ReceiveData));
-        mReceiveThread.IsBackground = true;
         mReceiveThread.Start();
+    }
+
+    private void InitImageConnection()
+    {
+        mImageListener = new TcpListener(IPAddress.Parse(mHostIP), mImagePort);
+        mImageListener.Start();
+        mImageClient = mImageListener.AcceptTcpClient();
+        mImageStream = mImageClient.GetStream();
+        mImageClientConnected = true;
     }
 
     public void SendImage(byte[] bytes)
     {
         try
         {
-            mCameraSender.Send(bytes, bytes.Length, mCameraEndPoint);
+            //mImageSender.Send(bytes, bytes.Length, mImageEndPoint);
+            mImageStream.Write(bytes, 0, bytes.Length);
         }
         catch (Exception err)
         {
@@ -106,20 +136,22 @@ public class ReinforcementAgentTCPIface
     private void ReceiveData()
     {
         IPAddress address = IPAddress.Parse(mHostIP);
-        mListener = new TcpListener(address, mActionInputPort);
-        mListener.Start();
+        mActionListener = new TcpListener(address, mActionInputPort);
+        mActionListener.Start();
 
-        mActionReceiver = mListener.AcceptTcpClient();
+        mActionClient = mActionListener.AcceptTcpClient();
 
-        NetworkStream nwStream = mActionReceiver.GetStream();
-        byte[] buffer = new byte[mActionReceiver.ReceiveBufferSize];
+        NetworkStream nwStream = mActionClient.GetStream();
+        mActionClientConnected = true;
+
+        byte[] buffer = new byte[mActionClient.ReceiveBufferSize];
 
         while (true)
         {
 
             try
             {
-                int bytesRead = nwStream.Read(buffer, 0, mActionReceiver.ReceiveBufferSize);
+                int bytesRead = nwStream.Read(buffer, 0, mActionClient.ReceiveBufferSize);
                 if(bytesRead > 0)
                 {
                     mLatestAction = Encoding.UTF8.GetString(buffer);
@@ -139,6 +171,12 @@ public class ReinforcementAgentTCPIface
     {
         mReceiveThread.Abort();
         mReceiveThread.Join();
+
+        mActionClient.Close();
+        mActionListener.Stop();
+
+        mImageClient.Close();
+        mImageListener.Stop();
     }
 
 }
