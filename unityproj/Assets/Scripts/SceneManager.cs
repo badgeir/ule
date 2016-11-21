@@ -29,6 +29,7 @@ public class SceneManager : MonoBehaviour {
 
             mAgent.set_action_available(false);
             string actionstr = mAgent.GetActionString();
+            Debug.Log(actionstr);
 
             TickAllTickableObjects();
 

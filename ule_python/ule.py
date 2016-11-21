@@ -26,11 +26,11 @@ class ULEIface:
         self.imageSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.imageSock.connect((self.hostIP, self.imagePort))
 
-        self.infoSock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.infoSock.bind((self.hostIP, self.infoPort))
+        self.infoSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.infoSock.connect((self.hostIP, self.infoPort))
         
         # wait for handshake
-        self.infoSock.recvfrom(1024)
+        self.infoSock.recv(1024)
 
     def step(self, action):
         #send action
@@ -38,9 +38,9 @@ class ULEIface:
 
         #receive image from environment
         imgbytes = self.imageSock.recv(10000)
-        
+
         #receive other info from environment
-        infostr, addr = self.infoSock.recvfrom(1024)
+        infostr = self.infoSock.recv(1024)
 
         img = None
         try:

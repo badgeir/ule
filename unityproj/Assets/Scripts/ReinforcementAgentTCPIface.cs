@@ -20,13 +20,10 @@ public class ReinforcementAgentTCPIface
 
     string mHostIP;
 
-    TcpListener mActionListener, mImageListener;
-    TcpClient mActionClient, mImageClient;
+    TcpListener mActionListener, mImageListener, mInfoListener;
+    TcpClient mActionClient, mImageClient, mInfoClient;
 
-    NetworkStream mImageStream;
-
-    UdpClient mInfoSender, mImageSender;
-    IPEndPoint mInfoEndPoint, mImageEndPoint;
+    NetworkStream mImageStream, mInfoStream;
 
     int mActionInputPort;
     int mImagePort, mInfoPort;
@@ -37,7 +34,7 @@ public class ReinforcementAgentTCPIface
     {
         mActionClientConnected = false;
         mImageClientConnected = false;
-        mInfoClientConnected = true;
+        mInfoClientConnected = false;
 
         mHostIP = hostIp;
         mActionInputPort = actionport;
@@ -61,17 +58,14 @@ public class ReinforcementAgentTCPIface
     {
 
         Thread imThread = new Thread(new ThreadStart(InitImageConnection));
-        imThread.IsBackground = true;
         imThread.Start();
 
-        //mImageEndPoint = new IPEndPoint(IPAddress.Parse(mHostIP), mImagePort);
-        mInfoEndPoint = new IPEndPoint(IPAddress.Parse(mHostIP), mInfoPort);
-
-        //mImageSender = new UdpClient();
-        mInfoSender = new UdpClient();
+        Thread infoThread = new Thread(new ThreadStart(InitInfoConnection));
+        infoThread.Start();
 
         //receiver
         mReceiveThread = new Thread(new ThreadStart(ReceiveData));
+        mReceiveThread.IsBackground = true;
         mReceiveThread.Start();
     }
 
@@ -84,11 +78,19 @@ public class ReinforcementAgentTCPIface
         mImageClientConnected = true;
     }
 
+    private void InitInfoConnection()
+    {
+        mInfoListener = new TcpListener(IPAddress.Parse(mHostIP), mInfoPort);
+        mInfoListener.Start();
+        mInfoClient = mInfoListener.AcceptTcpClient();
+        mInfoStream = mInfoClient.GetStream();
+        mInfoClientConnected = true;
+    }
+
     public void SendImage(byte[] bytes)
     {
         try
         {
-            //mImageSender.Send(bytes, bytes.Length, mImageEndPoint);
             mImageStream.Write(bytes, 0, bytes.Length);
         }
         catch (Exception err)
@@ -130,7 +132,7 @@ public class ReinforcementAgentTCPIface
     public void SendJson(JSONClass json)
     {
         byte[] bytes = Encoding.UTF8.GetBytes(json.ToString());
-        mInfoSender.Send(bytes, bytes.Length, mInfoEndPoint);
+        mInfoStream.Write(bytes, 0, bytes.Length);
     }
 
     private void ReceiveData()
@@ -177,6 +179,9 @@ public class ReinforcementAgentTCPIface
 
         mImageClient.Close();
         mImageListener.Stop();
+
+        mInfoClient.Close();
+        mInfoListener.Stop();
     }
 
 }
