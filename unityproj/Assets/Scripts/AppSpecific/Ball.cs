@@ -16,7 +16,7 @@ public class Ball : ActiveObject {
         GameObject.Find("SceneManager").GetComponent<SceneManager>().AddActiveObject(this);
     }
 
-	// Update is called once per frame
+	// Ticked by SceneManager on each action received
 	public override void Tick()
     {
         transform.Translate((mBallDirection * mHorizontalSpeed + Vector3.up*mVerticalSpeed));
