@@ -1,6 +1,6 @@
 
 # Author: Peter Leupi
-# UDP interface between Unity learning environment and python
+# TCP interface between Unity learning environment and python
 
 import numpy as np
 
@@ -47,9 +47,11 @@ class ULEIface:
             img = mpimg.imread(io.BytesIO(imgbytes))
         except Exception as e:
             print('not an image')
-
+        
+        # decode json string
         info = self.decodeJson(json.loads(infostr))
 
+        # package image and additional observations (if they exist) in a struct
         observation = {}
         observation['img'] = img
         if info.has_key('observation'):
@@ -67,17 +69,20 @@ class ULEIface:
 
     def decodeJson(self, info):
         decoded = {}
-        for key in info.keys():
-            k = str(key)
+        try:
+            for key in info.keys():
+                k = str(key)
 
-            if info[k].has_key('dtype'):
-                dtype = str(info[k]['dtype'])
-                if dtype == 'int':
-                    decoded[k] = int(info[k]['value'])
-                elif dtype == 'float':
-                    decoded[k] = float(info[k]['value'])
-            elif k == 'observation':
-                decoded[k] = self.decodeJson(info[k])
+                if info[k].has_key('dtype'):
+                    dtype = str(info[k]['dtype'])
+                    if dtype == 'int':
+                        decoded[k] = int(info[k]['value'])
+                    elif dtype == 'float':
+                        decoded[k] = float(info[k]['value'])
+                elif k == 'observation':
+                    decoded[k] = self.decodeJson(info[k])
+        except Exception as e:
+            print('Error decoding json string:', e)
         return decoded
 
     
