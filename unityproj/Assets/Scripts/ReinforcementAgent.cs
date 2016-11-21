@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using SimpleJSON;
 
 public class ReinforcementAgent : MonoBehaviour {
@@ -21,6 +22,12 @@ public class ReinforcementAgent : MonoBehaviour {
     {
         mIface.SendImage(image);
         mIface.SendInfo(reward, gamestatus);
+    }
+
+    public void SendReinforcementFeedback(byte[] image, float reward, int gamestatus, List<Observation> observations)
+    {
+        mIface.SendImage(image);
+        mIface.SendInfo(reward, gamestatus, observations);
     }
 
     public bool action_available()

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Ball : ActiveObject {
+public class Ball : TickableObject
+{
 
     private float mHorizontalSpeed;
     private float mVerticalSpeed;

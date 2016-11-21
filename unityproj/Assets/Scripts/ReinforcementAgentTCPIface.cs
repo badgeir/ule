@@ -1,10 +1,13 @@
 ﻿
 using System.Collections;
+using System.Collections.Generic;
 using System;
 using System.Text;
+
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+
 using SimpleJSON;
 
 public class ReinforcementAgentTCPIface
@@ -73,8 +76,23 @@ public class ReinforcementAgentTCPIface
         json["status"]["dtype"] = "int";
         json["status"]["value"].AsInt = gamestatus;
 
-        json["observation"]["axis0"]["dtype"] = "float";
-        json["observation"]["axis0"]["value"].AsFloat = 0.33f;
+        SendJson(json);
+    }
+
+    public void SendInfo(float reward, int gamestatus, List<Observation> observations)
+    {
+        JSONClass json = new JSONClass();
+        json["reward"]["dtype"] = "float";
+        json["reward"]["value"].AsFloat = reward;
+
+        json["status"]["dtype"] = "int";
+        json["status"]["value"].AsInt = gamestatus;
+
+        foreach(Observation o in observations)
+        {
+            json["observation"][o.name()]["dtype"] = o.datatype();
+            json["observation"][o.name()]["value"].AsFloat = o.value();
+        }
 
         SendJson(json);
     }
@@ -102,7 +120,6 @@ public class ReinforcementAgentTCPIface
             try
             {
                 int bytesRead = nwStream.Read(buffer, 0, mActionReceiver.ReceiveBufferSize);
-                UnityEngine.Debug.Log("hi");
                 if(bytesRead > 0)
                 {
                     mLatestAction = Encoding.UTF8.GetString(buffer);

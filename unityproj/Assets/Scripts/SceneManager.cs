@@ -12,12 +12,14 @@ public class SceneManager : MonoBehaviour {
     float mAccumulatedReward;
     GameStatus mGameStatus;
 
-    private List<ActiveObject> mActiveObjects;
+    private List<TickableObject> mActiveObjects;
+    private List<Observation> mObservations;
 
     void Awake () {
         mGameStatus = GameStatus.StatusOK;
         mAccumulatedReward = 0;
-        mActiveObjects = new List<ActiveObject>();
+        mActiveObjects = new List<TickableObject>();
+        mObservations = new List<Observation>();
     }
 
     void Update()
@@ -28,24 +30,29 @@ public class SceneManager : MonoBehaviour {
             mAgent.set_action_available(false);
             string actionstr = mAgent.GetActionString();
 
-            TickAll();
+            TickAllTickableObjects();
 
             byte[] imagebytes = mCamera.GetImageBytes();
-            mAgent.SendReinforcementFeedback(imagebytes, mAccumulatedReward, (int)mGameStatus);
+            mAgent.SendReinforcementFeedback(imagebytes, mAccumulatedReward, (int)mGameStatus, mObservations);
         }
     }
 
-    void TickAll()
+    void TickAllTickableObjects()
     {
-        foreach(ActiveObject obj in mActiveObjects)
+        foreach (TickableObject obj in mActiveObjects)
         {
             obj.Tick();
         }
     }
 
-    public void AddActiveObject(ActiveObject obj)
+    public void AddActiveObject(TickableObject obj)
     {
         mActiveObjects.Add(obj);
+    }
+
+    public void AddObservation(Observation obs)
+    {
+        mObservations.Add(obs);
     }
 
     public void GameOver()

@@ -45,6 +45,7 @@ class ULEIface:
             img = mpimg.imread(io.BytesIO(imgbytes))
         except Exception as e:
             print('not an image')
+
         info = self.decodeJson(json.loads(infostr))
 
         observation = {}

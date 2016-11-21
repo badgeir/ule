@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ActiveObject : MonoBehaviour {
+public class TickableObject : MonoBehaviour {
 
     public virtual void Tick()
     {
