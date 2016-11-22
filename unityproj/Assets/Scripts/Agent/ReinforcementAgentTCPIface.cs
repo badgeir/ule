@@ -96,6 +96,17 @@ public class ReinforcementAgentTCPIface
         }
     }
 
+    public void SendAvailableMotors(List<Motor> motors)
+    {
+        JSONClass json = new JSONClass();
+        foreach (Motor motor in motors)
+        {
+            json.Add("Motors", motor.ToJson());
+        }
+
+        SendJson(json);
+    }
+
     public void SendInfo(float reward, int gamestatus, List<Sensor> sensors)
     {
         JSONClass json = new JSONClass();
@@ -107,7 +118,7 @@ public class ReinforcementAgentTCPIface
 
         foreach(Sensor sens in sensors)
         {
-            json["observation"][sens.observation().name()] = sens.observation().ToJson();
+            json.Add("observation", sens.observation().ToJson());
         }
 
         SendJson(json);

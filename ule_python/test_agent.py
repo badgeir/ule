@@ -13,7 +13,8 @@ def main():
     for k in observation.keys():
         print(k + ':')
         print(observation[k])
-    
+        
+    print(env.available_motors())
     
     print(reward)
     print(status)

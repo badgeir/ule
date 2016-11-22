@@ -5,29 +5,38 @@ using SimpleJSON;
 
 public abstract class AgentAction
 {
-    public abstract string name();
     public abstract string datatype();
 
     public abstract object value();
     public abstract void set_value(object value);
+
+    public abstract object max();
+    public abstract object min();
 
     public abstract JSONNode ToJson();
 }
 
 public class AgentAction<T> : AgentAction {
 
-    private string mName;
     private T mValue;
 
-    public AgentAction(string name, T startingaction)
+    private T mMaxVal;
+    private T mMinVal;
+
+    bool mLimited;
+
+    public AgentAction(T startingaction)
     {
-        mName = name;
         mValue = startingaction;
+        mLimited = false;
     }
 
-    public override string name()
+    public AgentAction(T startingaction, T minval, T maxval)
     {
-        return mName;
+        mValue = startingaction;
+        mMinVal = minval;
+        mMaxVal = maxval;
+        mLimited = true;
     }
 
     public override string datatype()
@@ -45,11 +54,26 @@ public class AgentAction<T> : AgentAction {
         mValue = (T)value;
     }
 
+    public override object max()
+    {
+        return mMaxVal;
+    }
+
+    public override object min()
+    {
+        return mMinVal;
+    }
+
     public override JSONNode ToJson()
     {
-        JSONArray json = new JSONArray();
+        JSONClass json = new JSONClass();
         json["datatype"] = mValue.GetType().ToString();
         json["value"] = mValue.ToString();
+        if(mLimited)
+        {
+            json["maxval"] = mMaxVal.ToString();
+            json["minval"] = mMinVal.ToString();
+        }
         return json;
     }
 }

@@ -48,8 +48,8 @@ public class Observation<T> : Observation
     public override JSONNode ToJson()
     {
         JSONClass json = new JSONClass();
-        json["datatype"] = mValue.GetType().ToString();
-        json["value"] = mValue.ToString();
+        json[mName]["datatype"] = mValue.GetType().ToString();
+        json[mName]["value"] = mValue.ToString();
         return json;
     }
 }

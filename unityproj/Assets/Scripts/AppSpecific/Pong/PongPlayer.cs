@@ -5,25 +5,24 @@ using SimpleJSON;
 public class PongPlayer : Motor {
 
     AgentAction<float> mAgentAction;
+
+    private string mName;
+
 	// Use this for initialization
 	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+        mName = "PongPaddle";
+        mAgentAction = new AgentAction<float>(transform.position.y, -1, 1);
 	}
 
     public override void set_output(AgentAction output)
     {
-        transform.Translate(Vector3.up * (float)output.value());
+        transform.position = Vector3.up * (float)output.value();
     }
 
-    JSONNode JsonNode()
+    public override JSONNode ToJson()
     {
-        JSONArray json = new JSONArray();
-        json["PongPlayer"].Add(mAgentAction.ToJson());
+        JSONClass json = new JSONClass();
+        json[mName] = mAgentAction.ToJson();
         return json;
     }
 
