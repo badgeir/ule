@@ -10,6 +10,9 @@
 - SceneManager must implement two run modes: Discrete and RealTime.
 - In Discrete mode, timescale must be 0 between all actions, physics must only be updated on action.
 - In RealTime mode, time and physics should run independent of ule, and ule samples the running Unity game on each action.
+- SceneManager must be the same for all games (prefab)
+- ReinforcementAgent must be the same for all games.
+- Dynamic ReinforcementAgent <--> All game specifics lie in motors and sensors (Owned by ReinforcementAgent in dynamic lists).
 - Implement config file for setting up SceneManager.
 - config should also decide tcp ports for IPC between unity and ule.
 - user should be able to decide tcp ports in ule (ule must edit config).
