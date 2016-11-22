@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using SimpleJSON;
 
-public abstract class Observation
+public abstract class AgentAction
 {
     public abstract string name();
     public abstract string datatype();
@@ -14,15 +14,15 @@ public abstract class Observation
     public abstract JSONNode ToJson();
 }
 
-public class Observation<T> : Observation
-{
+public class AgentAction<T> : AgentAction {
+
     private string mName;
     private T mValue;
 
-    public Observation(string name, T startingobservation)
+    public AgentAction(string name, T startingaction)
     {
         mName = name;
-        mValue = startingobservation;
+        mValue = startingaction;
     }
 
     public override string name()
@@ -32,7 +32,7 @@ public class Observation<T> : Observation
 
     public override string datatype()
     {
-        return typeof(T).ToString();
+        return mValue.GetType().ToString();
     }
 
     public override object value()
@@ -47,7 +47,7 @@ public class Observation<T> : Observation
 
     public override JSONNode ToJson()
     {
-        JSONClass json = new JSONClass();
+        JSONArray json = new JSONArray();
         json["datatype"] = mValue.GetType().ToString();
         json["value"] = mValue.ToString();
         return json;

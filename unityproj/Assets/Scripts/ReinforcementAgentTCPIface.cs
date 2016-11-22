@@ -96,31 +96,18 @@ public class ReinforcementAgentTCPIface
         }
     }
 
-    public void SendInfo(float reward, int gamestatus)
+    public void SendInfo(float reward, int gamestatus, List<Sensor> sensors)
     {
         JSONClass json = new JSONClass();
-        json["reward"]["dtype"] = "float";
+        json["reward"]["datatype"] = "float";
         json["reward"]["value"].AsFloat = reward;
 
-        json["status"]["dtype"] = "int";
+        json["status"]["datatype"] = "int";
         json["status"]["value"].AsInt = gamestatus;
 
-        SendJson(json);
-    }
-
-    public void SendInfo(float reward, int gamestatus, List<Observation> observations)
-    {
-        JSONClass json = new JSONClass();
-        json["reward"]["dtype"] = "float";
-        json["reward"]["value"].AsFloat = reward;
-
-        json["status"]["dtype"] = "int";
-        json["status"]["value"].AsInt = gamestatus;
-
-        foreach(Observation o in observations)
+        foreach(Sensor sens in sensors)
         {
-            json["observation"][o.name()]["dtype"] = o.datatype();
-            json["observation"][o.name()]["value"].AsFloat = o.value();
+            json["observation"][sens.observation().name()] = sens.observation().ToJson();
         }
 
         SendJson(json);

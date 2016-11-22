@@ -68,21 +68,23 @@ class ULEIface:
         return observation, reward, status
 
     def decodeJson(self, info):
+        #print(info)
         decoded = {}
         try:
             for key in info.keys():
                 k = str(key)
 
-                if info[k].has_key('dtype'):
-                    dtype = str(info[k]['dtype'])
+                if info[k].has_key('datatype'):
+                    dtype = str(info[k]['datatype'])
                     if dtype == 'int':
                         decoded[k] = int(info[k]['value'])
-                    elif dtype == 'float':
+                    elif dtype == 'float' or dtype == 'System.Single':
                         decoded[k] = float(info[k]['value'])
                 elif k == 'observation':
                     decoded[k] = self.decodeJson(info[k])
         except Exception as e:
             print('Error decoding json string:', e)
+            print(info)
         return decoded
 
     

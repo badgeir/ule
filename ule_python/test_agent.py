@@ -8,7 +8,7 @@ import ule
 def main():
     env = ule.ULEIface()
     
-    observation, reward, status = env.step(0)
+    observation, reward, status = env.step(1)
 
     for k in observation.keys():
         print(k + ':')

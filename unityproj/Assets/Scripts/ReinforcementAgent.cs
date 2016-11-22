@@ -8,6 +8,12 @@ public class ReinforcementAgent : MonoBehaviour {
     ReinforcementAgentTCPIface mIface;
     SceneManager mManager;
 
+    public VirtualCamera mCamera;
+    public List<Sensor> mSensors;
+    public List<Motor> mMotors;
+
+    private float mReward;
+
 	// Use this for initialization
     void Start()
     {
@@ -15,6 +21,7 @@ public class ReinforcementAgent : MonoBehaviour {
 
         mIface = new ReinforcementAgentTCPIface("127.0.0.1", 3000, 3001, 3002, mManager.QueueAction);
         StartCoroutine(ConnectToAgent());
+
     }
 
     IEnumerator ConnectToAgent()
@@ -25,19 +32,25 @@ public class ReinforcementAgent : MonoBehaviour {
             yield return new WaitForSeconds(0.1f);
         }
         // oneway handshake, tell client it's ok to start sending actions
-        mIface.SendInfo(0, 0);
+        mIface.SendInfo(0, 0, mSensors);
     }
 
-    public void SendReinforcementFeedback(byte[] image, float reward, int gamestatus)
+    public void PerformActions(string actions)
     {
-        mIface.SendImage(image);
-        mIface.SendInfo(reward, gamestatus);
+        Debug.Log(actions);
     }
 
-    public void SendReinforcementFeedback(byte[] image, float reward, int gamestatus, List<Observation> observations)
+    public void SendReinforcementFeedback(int gamestatus)
     {
+        byte[] image = mCamera.GetImageBytes();
         mIface.SendImage(image);
-        mIface.SendInfo(reward, gamestatus, observations);
+        mIface.SendInfo(mReward, gamestatus, mSensors);
+        mReward = 0;
+    }
+
+    public void AddReward(float amount)
+    {
+        mReward += amount;
     }
 
     void OnDestroy()

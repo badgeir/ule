@@ -34,12 +34,10 @@ public class SceneManager : MonoBehaviour {
         // check if new action has been added to queue
         if(mActionQueue.Count > 0)
         {
-            Debug.Log(mActionQueue.Dequeue());
+            mAgent.PerformActions(mActionQueue.Dequeue());
 
             TickAllTickableObjects();
-
-            byte[] imagebytes = mCamera.GetImageBytes();
-            mAgent.SendReinforcementFeedback(imagebytes, mAccumulatedReward, (int)mGameStatus, mObservations);
+            mAgent.SendReinforcementFeedback((int)mGameStatus);
         }
     }
 
