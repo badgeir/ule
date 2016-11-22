@@ -110,15 +110,16 @@ public class ReinforcementAgentTCPIface
     public void SendInfo(float reward, int gamestatus, List<Sensor> sensors)
     {
         JSONClass json = new JSONClass();
-        json["reward"]["datatype"] = "float";
+        json["reward"]["type"] = "float";
         json["reward"]["value"].AsFloat = reward;
 
-        json["status"]["datatype"] = "int";
+        json["status"]["type"] = "int";
         json["status"]["value"].AsInt = gamestatus;
 
         foreach(Sensor sens in sensors)
         {
-            json.Add("observation", sens.observation().ToJson());
+            sens.Sample();
+            json.Add("observation", sens.ToJson());
         }
 
         SendJson(json);

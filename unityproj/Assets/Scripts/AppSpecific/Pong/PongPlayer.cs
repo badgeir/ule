@@ -6,7 +6,10 @@ public class PongPlayer : DiscreteActionMotor {
 
     void Start()
     {
-        base.Start();
+        mName = "PongPlayer";
+        mNumActions = 3;
+
+        base.Init();
     }
     
     protected override void Act(int action)

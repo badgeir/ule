@@ -2,13 +2,11 @@
 using System;
 using System.Collections;
 
-public class Ball : Sensor
+public class Ball : TickableObject
 {
     private float mHorizontalSpeed;
     private float mVerticalSpeed;
     private Vector3 mBallDirection;
-
-    public Observation<float> mObservation;
 
     void Start()
     {
@@ -18,19 +16,12 @@ public class Ball : Sensor
 
         GameObject.Find("SceneManager").GetComponent<SceneManager>().AddActiveObject(this);
 
-        mObservation = new Observation<float>("Ball", transform.position.x);
-    }
-
-    public override Observation observation()
-    {
-        return mObservation;
     }
 
 	// Ticked by SceneManager on each action received
 	public override void Tick()
     {
         transform.Translate((mBallDirection * mHorizontalSpeed + Vector3.up*mVerticalSpeed));
-        mObservation.set_value(transform.position.x);
 	}
 
     void OnTriggerEnter(Collider col)

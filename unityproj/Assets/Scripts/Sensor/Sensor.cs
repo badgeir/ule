@@ -1,9 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using SimpleJSON;
 
-public class Sensor : TickableObject {
+public class Sensor : MonoBehaviour {
 
-    public virtual Observation observation()
+    public virtual string name()
+    {
+        return "";
+    }
+
+    public virtual void Sample()
+    {
+    }
+
+    public virtual JSONNode ToJson()
     {
         return null;
     }

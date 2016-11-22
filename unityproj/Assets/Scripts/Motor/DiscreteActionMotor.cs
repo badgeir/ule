@@ -4,24 +4,16 @@ using SimpleJSON;
 
 public class DiscreteActionMotor : Motor {
 
-    public string mName;
-    public int mNumActions;
+    protected string mName;
+    protected int mNumActions;
 
     private int mMaxValue;
     private int mMinValue;
 
-    protected void Start()
+    protected void Init()
     {
-        Init();
-    }
-
-    protected virtual void Init()
-    {
-        Debug.Log("Init " + mNumActions);
-
         mMinValue = 0;
-        mMaxValue = mNumActions - 1;
-        
+        mMaxValue = mNumActions - 1;   
     }
 
     public override bool SetOutput(string output)

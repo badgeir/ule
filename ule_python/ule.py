@@ -84,14 +84,14 @@ class ULEIface:
         return actions
     
     def decodeJson(self, info):
-        #print(info)
+        print(info)
         decoded = {}
         try:
             for key in info.keys():
                 k = str(key)
 
-                if info[k].has_key('datatype'):
-                    dtype = str(info[k]['datatype'])
+                if info[k].has_key('type'):
+                    dtype = str(info[k]['type'])
                     if dtype == 'int':
                         decoded[k] = int(info[k]['value'])
                     elif dtype == 'float' or dtype == 'System.Single':

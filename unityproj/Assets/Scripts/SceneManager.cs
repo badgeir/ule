@@ -14,7 +14,6 @@ public class SceneManager : MonoBehaviour {
     GameStatus mGameStatus;
 
     private List<TickableObject> mActiveObjects;
-    private List<Observation> mObservations;
 
     private Queue<string> mActionQueue;
 
@@ -24,7 +23,6 @@ public class SceneManager : MonoBehaviour {
         mAccumulatedReward = 0;
 
         mActiveObjects = new List<TickableObject>();
-        mObservations = new List<Observation>();
 
         mActionQueue = new Queue<string>();
     }
@@ -37,6 +35,7 @@ public class SceneManager : MonoBehaviour {
             mAgent.PerformActions(mActionQueue.Dequeue());
 
             TickAllTickableObjects();
+
             mAgent.SendReinforcementFeedback((int)mGameStatus);
         }
     }
@@ -62,11 +61,6 @@ public class SceneManager : MonoBehaviour {
     public void AddActiveObject(TickableObject obj)
     {
         mActiveObjects.Add(obj);
-    }
-
-    public void AddObservation(Observation obs)
-    {
-        mObservations.Add(obs);
     }
 
     public void GameOver()
