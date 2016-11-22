@@ -3,6 +3,8 @@
 - ReinforcementAgent should hold a List of Sensors and Motors
 - ReinforcementAgent should own the Game Camera
 - ReinforcementAgent should supply the available motors/actions in the info handshake during startup
+- ReinforcementAgent should implement AddReward() for acumulating rewards.
+- Reward should empty itself on each SendInfo
 - ULEIface must store actions, and implement available_actions() method (numpy array or dict?)
 - ULEIface should not connect in __init__, but rather in a load('game name') method
 - ULEIface should execute Unity in batchmode in 'load' method
@@ -18,3 +20,4 @@
 - user should be able to decide tcp ports in ule (ule must edit config).
 
 - Linux support
+- Multiagent support. SceneManager holds List of ReinforcementAgents?
