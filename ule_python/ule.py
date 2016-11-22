@@ -31,11 +31,10 @@ class ULEIface:
         
         # wait for handshake
         motors = self.infoSock.recv(1024)
-        jsonMotors = json.loads(motors)
-        self.availableMotors = self.decodeMotors(jsonMotors["Motors"])
+        self.motorsJson = json.loads(motors)["Motors"]
 
-    def available_motors(self):
-        return self.availableMotors
+    def action_space(self):
+        return self.availableActions()
 
     def step(self, action):
         #send action
@@ -72,22 +71,17 @@ class ULEIface:
         status = info['status']
         return observation, reward, status
 
-    def decodeMotors(self, motors):
-        decoded = {}
+    def availableActions(self):
+        actions = None
+        motors = self.motorsJson
         try:
             for key in motors.keys():
-                k = str(key)
-                decoded[k] = {}
-                decoded[k]['datatype'] = motors[k]['datatype']
-                decoded[k]['default value'] = motors[k]['value']
-                if motors[k].has_key('maxval'):
-                    decoded[k]['maxval'] = motors[k]['maxval']
-                if motors[k].has_key('minval'):
-                    decoded[k]['minval'] = motors[k]['minval']
+                if motors[key]["type"] == 'Discrete Action':
+                    actions = np.arange(int(motors[key]["range"]))
         except Exception as e:
             print('Error decoding available motors:',e)
             print(motors)
-        return decoded
+        return actions
     
     def decodeJson(self, info):
         #print(info)

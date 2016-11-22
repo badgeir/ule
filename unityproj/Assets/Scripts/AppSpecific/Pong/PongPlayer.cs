@@ -2,28 +2,21 @@
 using System.Collections;
 using SimpleJSON;
 
-public class PongPlayer : Motor {
+public class PongPlayer : DiscreteActionMotor {
 
-    AgentAction<float> mAgentAction;
-
-    private string mName;
-
-	// Use this for initialization
-	void Start () {
-        mName = "PongPaddle";
-        mAgentAction = new AgentAction<float>(transform.position.y, -1, 1);
-	}
-
-    public override void set_output(AgentAction output)
+    void Start()
     {
-        transform.position = Vector3.up * (float)output.value();
+        base.Start();
     }
-
-    public override JSONNode ToJson()
+    
+    protected override void Act(int action)
     {
-        JSONClass json = new JSONClass();
-        json[mName] = mAgentAction.ToJson();
-        return json;
+        switch(action)
+        {
+            case 0: Debug.Log(0); break;
+            case 1: Debug.Log(1); break;
+            case 2: Debug.Log(2); break;
+            default: break;
+        }
     }
-
 }

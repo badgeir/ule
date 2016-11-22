@@ -9,18 +9,9 @@ public class Motor : TickableObject {
         return "";
     }
 
-    public virtual object max()
+    public virtual bool SetOutput(string output)
     {
-        return 0;
-    }
-
-    public virtual object min()
-    {
-        return 0;
-    }
-
-    public virtual void set_output(AgentAction output)
-    {
+        return false;
     }
 
     public virtual JSONNode ToJson()

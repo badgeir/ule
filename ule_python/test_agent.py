@@ -14,7 +14,7 @@ def main():
         print(k + ':')
         print(observation[k])
         
-    print(env.available_motors())
+    print(env.action_space())
     
     print(reward)
     print(status)
