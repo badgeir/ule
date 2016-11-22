@@ -1,0 +1,13 @@
+- Implement Sensor.cs and Motor.cs
+- Sensor should replace Observation class
+- ReinforcementAgent should hold a List of Sensors and Motors
+- ReinforcementAgent should own the Game Camera
+- ReinforcementAgent should supply the available motors/actions in the info handshake during startup
+- ULEIface must store actions, and implement available_actions() method (numpy array or dict?)
+- ULEIface should not connect in __init__, but rather in a load('game name') method
+- ULEIface should execute Unity in batchmode in 'load' method
+- ULEIface should build executable (to latest changes eventually) if not already built
+- SceneManager must implement two run modes: Discrete and RealTime.
+- In Discrete mode, timescale must be 0 between all actions, physics must only be updated on action.
+- In RealTime mode, time and physics should run independent of ule, and ule samples the running Unity game on each action.
+- Implement config file for setting up SceneManager.
