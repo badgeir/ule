@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Text;
@@ -63,7 +61,6 @@ public class ReinforcementAgentTCPIface
         Thread infoThread = new Thread(new ThreadStart(InitInfoConnection));
         infoThread.Start();
 
-        //receiver
         mReceiveThread = new Thread(new ThreadStart(ReceiveData));
         mReceiveThread.IsBackground = true;
         mReceiveThread.Start();
