@@ -4,7 +4,7 @@ using SimpleJSON;
 
 public class Motor : TickableObject {
 
-    public virtual string name()
+    new public virtual string name()
     {
         return "";
     }

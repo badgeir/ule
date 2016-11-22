@@ -84,7 +84,6 @@ class ULEIface:
         return actions
     
     def decodeJson(self, info):
-        print(info)
         decoded = {}
         try:
             for key in info.keys():

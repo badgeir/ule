@@ -23,7 +23,6 @@ public class FloatSensor : Sensor {
         JSONClass json = new JSONClass();
         json[mName]["type"] = "float";
         json[mName]["value"] = mValue.ToString();
-        Debug.Log(mValue.ToString());
         return json;
     }
 }

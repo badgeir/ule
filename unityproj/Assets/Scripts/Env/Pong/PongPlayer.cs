@@ -4,11 +4,13 @@ using SimpleJSON;
 
 public class PongPlayer : DiscreteActionMotor {
 
+    public float mSpeed;
+
     void Start()
     {
         mName = "PongPlayer";
         mNumActions = 3;
-
+        mSpeed = 0.05f;
         base.Init();
     }
     
@@ -16,9 +18,9 @@ public class PongPlayer : DiscreteActionMotor {
     {
         switch(action)
         {
-            case 0: Debug.Log(0); break;
-            case 1: Debug.Log(1); break;
-            case 2: Debug.Log(2); break;
+            case 0: break;
+            case 1: transform.Translate(Vector3.up*mSpeed); break;
+            case 2: transform.Translate(-Vector3.up * mSpeed); break;
             default: break;
         }
     }

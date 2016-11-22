@@ -10,19 +10,11 @@ def main():
     
     observation, reward, status = env.step(1)
 
-    for k in observation.keys():
-        print(k + ':')
-        print(observation[k])
-        
-    print(env.action_space())
+    for i in range(500):
+        actions = env.action_space()
+        act = np.random.choice(actions)
+        observation, reward, status = env.step(act)
     
-    print(reward)
-    print(status)
-    
-    img = observation['img']
-    plt.imshow(img)
-    plt.show()
-
     env.close()
 
 if __name__ == '__main__':

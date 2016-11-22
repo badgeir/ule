@@ -4,7 +4,7 @@ using SimpleJSON;
 
 public class Sensor : MonoBehaviour {
 
-    public virtual string name()
+    new public virtual string name()
     {
         return "";
     }
