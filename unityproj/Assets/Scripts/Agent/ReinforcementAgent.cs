@@ -33,7 +33,6 @@ public class ReinforcementAgent : MonoBehaviour {
         }
         // oneway handshake, tell client it's ok to start sending actions
         mIface.SendAvailableMotors(mMotors);
-        mIface.SendInfo(0, 0, mSensors);
     }
 
     public void PerformActions(string actions)
