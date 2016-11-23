@@ -14,7 +14,7 @@ from ule.spaces import Box
 
 def load(name='none', connectToRunning=True):
     if not connectToRunning:
-        if ule_env.start(name):
+        if start(name):
             print('successfully started environment %s.'%name)
     
     env = Env()
