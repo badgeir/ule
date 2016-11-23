@@ -9,7 +9,7 @@ import sys
 import io
 
 import ule
-from ule import jsonutil
+from ule.util import jsonutil
 from ule.spaces import Box
 
 def load(name='none', connectToRunning=True):
@@ -106,4 +106,4 @@ class Env(object):
         self.close()
 
     def __str__(self):
-        return 'not implemented'
+        return 'Env'
