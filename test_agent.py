@@ -8,19 +8,16 @@ import ule
 def main():
     env = ule.load()
     
-    observation, reward, status = env.step(1)
-    print(observation)
-    print(reward)
-    print(status)
-    # starttime = time.clock()
-    # for i in range(500):
-    #     actions = env.action_space
-    #     print(actions)
-    #     act = np.random.choice(actions)
-    #     observation, reward, status = env.step(act)
-    #     endtime = time.clock()
-    #     print(endtime - starttime)
-    #     starttime = endtime
+    # observation, reward, status = env.step(1)
+    # print(observation)
+    # print(reward)
+    # print(status)
+    starttime = time.clock()
+    for i in range(500):
+        observation, reward, status = env.step(np.random.randint(3))
+        endtime = time.clock()
+        print(endtime - starttime)
+        starttime = endtime
     
     env.close()
 

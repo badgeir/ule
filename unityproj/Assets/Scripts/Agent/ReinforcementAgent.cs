@@ -40,7 +40,7 @@ public class ReinforcementAgent : MonoBehaviour {
 
         foreach(Motor m in mMotors)
         {
-            m.SetOutput(actions);
+            m.SetOutput(int.Parse(actions));
         }
     }
 
