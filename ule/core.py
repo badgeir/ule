@@ -10,7 +10,7 @@ import io
 
 import ule
 from ule.util import jsonutil
-from ule.spaces import Box
+from ule.spaces import Vector
 
 def load(name='none', connectToRunning=True):
     if not connectToRunning:

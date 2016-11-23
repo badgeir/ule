@@ -8,9 +8,6 @@ public class PongPlayer : DiscreteActionMotor {
 
     void Start()
     {
-        mName = "PongPlayer";
-        mNumActions = 3;
-        mSpeed = 0.05f;
         base.Init();
     }
     
