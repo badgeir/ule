@@ -1,3 +1,4 @@
+- borrow Spaces, Env etc. from gym.
 - ULEIface must store actions, and implement available_actions() method (numpy array or dict?)
 - ULEIface should not connect in __init__, but rather in a load('game name') method
 - ULEIface should execute Unity in batchmode in 'load' method
