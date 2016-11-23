@@ -4,26 +4,21 @@ using SimpleJSON;
 
 public class DiscreteActionMotor : Motor {
 
-    protected string mName;
-    protected int mNumActions;
+    public string mName;
+    public int mNumActions;
 
-    private int mMaxValue;
-    private int mMinValue;
+    private DiscreteSpace mDiscreteSpace;
 
     protected void Init()
     {
-        mMinValue = 0;
-        mMaxValue = mNumActions - 1;   
+        mDiscreteSpace = new DiscreteSpace(mNumActions);   
     }
 
-    public override bool SetOutput(string output)
+    public override bool SetOutput(object value)
     {
-        int val = int.Parse(output);
-        if(val > mMaxValue || val < mMinValue)
-        {
-            return false;
-        }
-        Act(val);
+        if(mDiscreteSpace.Contains(value))
+        Act((int)value);
+
         return true;
     }
 
@@ -32,16 +27,10 @@ public class DiscreteActionMotor : Motor {
 
     }
 
-    public override string name()
-    {
-        return mName;
-    }
-
     public override JSONNode ToJson()
     {
         JSONClass json = new JSONClass();
-        json[mName]["type"] = "Discrete Action";
-        json[mName]["range"].AsInt = mNumActions;
+        json[mName] = mDiscreteSpace.ToJSON();
         return json;
     }
 }

@@ -1,9 +1,5 @@
-
-# Author: Peter Leupi
-# TCP interface between Unity learning environment and python
-
+import sys
 import numpy as np
-
 from matplotlib import image as mpimg
 
 import socket
@@ -11,15 +7,38 @@ import os
 import sys
 
 import io
-import json
 
-class ULEIface:
+import ule
+from ule import jsonutil
+from ule.spaces import Box
+
+def load(name='none', connectToRunning=True):
+    if not connectToRunning:
+        if ule_env.start(name):
+            print('successfully started environment %s.'%name)
+    
+    env = Env()
+    env.connect()
+    return env
+
+def start(name):
+    return False
+
+class Env(object):
     def __init__(self, hostIP="127.0.0.1", actionPort=3000, imagePort=3001, infoPort=3002):
+        self.closed = False
+        self.configured = False
+        
+        self.reward_range = (-np.inf, np.inf)
+        self.action_space = None
+        self.observation_space = None
+
         self.hostIP = "127.0.0.1"
         self.actionPort = actionPort
         self.imagePort = imagePort
         self.infoPort = infoPort
-        
+    
+    def connect(self):
         self.actionSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.actionSock.connect((self.hostIP, self.actionPort))
 
@@ -28,13 +47,9 @@ class ULEIface:
 
         self.infoSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.infoSock.connect((self.hostIP, self.infoPort))
-        
-        # wait for handshake
-        motors = self.infoSock.recv(1024)
-        self.motorsJson = json.loads(motors)["Motors"]
 
-    def action_space(self):
-        return self.availableActions()
+        # wait for handshake
+        info = self.infoSock.recv(1024)
 
     def step(self, action):
         #send action
@@ -53,7 +68,7 @@ class ULEIface:
             print('not an image')
         
         # decode json string
-        info = self.decodeJson(json.loads(infostr))
+        info = jsonutil.decodeJsonStr(infostr)
 
         # package image and additional observations (if they exist) in a struct
         observation = {}
@@ -71,39 +86,24 @@ class ULEIface:
         done = info['status']
         return observation, reward, done
 
-    def availableActions(self):
-        actions = None
-        motors = self.motorsJson
-        try:
-            for key in motors.keys():
-                if motors[key]["type"] == 'Discrete Action':
-                    actions = np.arange(int(motors[key]["range"]))
-        except Exception as e:
-            print('Error decoding available motors:',e)
-            print(motors)
-        return actions
-    
-    def decodeJson(self, info):
-        decoded = {}
-        try:
-            for key in info.keys():
-                k = str(key)
+    def reset(self):
+        observation = 0
+        return observation
 
-                if info[k].has_key('type'):
-                    dtype = str(info[k]['type'])
-                    if dtype == 'int':
-                        decoded[k] = int(info[k]['value'])
-                    elif dtype == 'float' or dtype == 'System.Single':
-                        decoded[k] = float(info[k]['value'])
-                elif k == 'observation':
-                    decoded[k] = self.decodeJson(info[k])
-        except Exception as e:
-            print('Error decoding json string:', e)
-            print(info)
-        return decoded
-
-    
     def close(self):
         self.actionSock.close()
         self.imageSock.close()
         self.infoSock.close()
+        self.closed = True
+
+    def seed(self, seed=None):
+        return 0
+
+    def configure(self, *args, **kwargs):
+        return False
+
+    def __del__(self):
+        self.close()
+
+    def __str__(self):
+        return 'not implemented'

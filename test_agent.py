@@ -3,10 +3,10 @@ import time
 import sys
 
 from matplotlib import pyplot as plt
-import ule2
+import ule
 
 def main():
-    env = ule2.load()
+    env = ule.load()
     
     observation, reward, status = env.step(1)
     print(observation)

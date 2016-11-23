@@ -9,7 +9,7 @@ public class Motor : TickableObject {
         return "";
     }
 
-    public virtual bool SetOutput(string output)
+    public virtual bool SetOutput(object output)
     {
         return false;
     }
@@ -18,4 +18,5 @@ public class Motor : TickableObject {
     {
         return null;
     }
+
 }
