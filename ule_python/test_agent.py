@@ -3,17 +3,24 @@ import time
 import sys
 
 from matplotlib import pyplot as plt
-import ule
+import ule2
 
 def main():
-    env = ule.ULEIface()
+    env = ule2.load()
     
     observation, reward, status = env.step(1)
-
-    for i in range(500):
-        actions = env.action_space()
-        act = np.random.choice(actions)
-        observation, reward, status = env.step(act)
+    print(observation)
+    print(reward)
+    print(status)
+    # starttime = time.clock()
+    # for i in range(500):
+    #     actions = env.action_space
+    #     print(actions)
+    #     act = np.random.choice(actions)
+    #     observation, reward, status = env.step(act)
+    #     endtime = time.clock()
+    #     print(endtime - starttime)
+    #     starttime = endtime
     
     env.close()
 
