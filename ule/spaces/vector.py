@@ -43,3 +43,4 @@ class Vector(Space):
         return "Vector" + str(self.size)
     def __eq__(self, other):
         return np.allclose(self.low, other.low) and np.allclose(self.high, other.high)
+        

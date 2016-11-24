@@ -44,3 +44,17 @@ class Motor(object):
         return self._space.__repr__() + ' Motor: %s'%str(self._value)
     def __str__(self):
         return self._space.__repr__() + ' Motor: %s'%str(self._value)
+
+    def __getitem__(self, idx):
+        try:
+            return self._value[idx]
+        except Exception as e:
+            print self._space.__repr__() + ' Motor does not support indexing'
+            return None
+    
+    def __setitem__(self,idx,value):
+        try:
+            self._value[idx] = value
+        except Exception as e:
+            print self._space.__repr__() + ' Motor does not support indexing'
+            return None
