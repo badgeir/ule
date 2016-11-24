@@ -16,7 +16,7 @@ class Motor(object):
         return self._value
     
     def sample(self):
-        return self_space.sample()
+        return self._space.sample()
 
     def space(self):
         return self._space
