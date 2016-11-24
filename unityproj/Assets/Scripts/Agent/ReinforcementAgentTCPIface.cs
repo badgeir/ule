@@ -122,14 +122,13 @@ public class ReinforcementAgentTCPIface
 			sens.Sample();
 			json.Add("sensors", sens.ToJson());
 		}
-
 		json["reward"].AsFloat = reward;
-		
+
 		json["done"].AsInt = gamestatus;
 
-		if(info == null)
+		if (info == null)
 		{
-			json["info"] = null;
+			json["info"] = "";
 		}
 		else
 		{

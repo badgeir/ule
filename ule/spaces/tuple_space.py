@@ -7,7 +7,7 @@ class Tuple(Space):
     Example usage:
     self.observation_space = spaces.Tuple((spaces.Discrete(2), spaces.Discrete(3)))
     """
-    def __init__(self, spaces):
+    def __init__(self, spaces=()):
         self.spaces = spaces
 
     def sample(self):

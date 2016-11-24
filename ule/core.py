@@ -60,7 +60,7 @@ class Env(object):
         imgbytes = self.imageSock.recv(10000)
 
         #receive other info from environment
-        infostr = self.infoSock.recv(1024)
+        feedback = self.infoSock.recv(1024)
 
         img = None
         try:
@@ -68,24 +68,11 @@ class Env(object):
         except Exception as e:
             print('not an image')
         
-        # decode json string
-        info = jsonparser.decodeJsonStr(infostr)
+        observation, reward, done, info = jsonparser.decodeFeedback(feedback)
+        observation['image'] = img
 
-        # package image and additional observations (if they exist) in a struct
-        observation = {}
-        observation['img'] = img
-        if info.has_key('observation'):
-            for key in info['observation'].keys():
-                observation[key] = info['observation'][key]
-            del info['observation']
+        return observation, reward, done, info
 
-        if not info.has_key('reward') or not info.has_key('status'):
-            print('Error: incomplete data received')
-            sys.exit()
- 
-        reward = info['reward']
-        done = info['status']
-        return observation, reward, done
 
     def reset(self):
         observation = 0
