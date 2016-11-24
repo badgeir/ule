@@ -50,7 +50,6 @@ class Motor(object):
             return self._value[idx]
         except Exception as e:
             print self._space.__repr__() + ' Motor does not support indexing'
-            return None
     
     def __setitem__(self,idx,value):
         try:
