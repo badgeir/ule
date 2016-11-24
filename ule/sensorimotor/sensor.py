@@ -48,5 +48,4 @@ class Sensor(object):
             self._value[idx] = value
         except Exception as e:
             print self._space.__repr__() + ' Sensor does not support indexing'
-            return None
         

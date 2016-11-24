@@ -57,4 +57,3 @@ class Motor(object):
             self._value[idx] = value
         except Exception as e:
             print self._space.__repr__() + ' Motor does not support indexing'
-            return None
