@@ -34,7 +34,7 @@ class Vector(Space):
     def to_json(self, sample_n):
         return np.array(sample_n).tolist()
     def from_json(self, sample_n):
-        return [np.asarray(sample) for sample in sample_n]
+        return np.array(sample_n).astype('float')
 
     @property
     def size(self):

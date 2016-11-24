@@ -30,8 +30,8 @@ class Env(object):
         self.configured = False
         
         self.reward_range = (-np.inf, np.inf)
-        self.actionSpace = None
-        self.sensors = None
+        self._motors = None
+        self._sensors = None
 
         self.hostIP = "127.0.0.1"
         self.actionPort = actionPort
@@ -50,7 +50,7 @@ class Env(object):
 
         # wait for handshake
         info = self.infoSock.recv(1024)
-        self.sensors, self.actionSpace = jsonparser.decodeSpaces(info)
+        self._sensors, self._motors = jsonparser.parseSensorsAndMotors(info)
 
     def step(self, action):
         #send action
@@ -68,10 +68,8 @@ class Env(object):
         except Exception as e:
             print('not an image')
         
-        observation, reward, done, info = jsonparser.decodeFeedback(feedback)
-        observation['image'] = img
-
-        return observation, reward, done, info
+        reward, done, info = jsonparser.parseFeedback(feedback, self._sensors)
+        return img, self._sensors, reward, done, info
 
 
     def reset(self):
@@ -91,10 +89,10 @@ class Env(object):
         return False
 
     def sensors(self):
-        return self.sensors
+        return self._sensors
     
-    def action_space(self):
-        return self.actionSpace
+    def motors(self):
+        return self._motors
 
     def __del__(self):
         self.close()

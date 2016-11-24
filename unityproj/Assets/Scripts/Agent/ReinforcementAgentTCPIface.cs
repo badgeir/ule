@@ -106,9 +106,10 @@ public class ReinforcementAgentTCPIface
 			json["sensors"][idx] = sens.JsonDescription();
 		}
 
+        idx = 0;
 		foreach (Motor motor in motors)
 		{
-            json.Add("motors", motor.JsonDescription());
+            json["motors"][idx] = motor.JsonDescription();
 		}
 
 		SendJson(json);
@@ -124,7 +125,6 @@ public class ReinforcementAgentTCPIface
 			json.Add("sensors", sens.SampleJson());
 		}
 		json["reward"].AsFloat = reward;
-
 		json["done"].AsInt = gamestatus;
 
 		if (info == null)

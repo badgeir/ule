@@ -1,18 +1,13 @@
-from ule.spaces import Vector
+from ule.spaces import Vector, Discrete
 import json
 
-# Space-related abstractions
-class Sensor(object):
-    """Defines the observation and action spaces, so you can write generic
-    code that applies to any Env. For example, you can choose a random
-    action.
-    """
+class Motor(object):
+
     def __init__(self, jsonlist):
         self._name = None
         self._space = None
         self.create_from_json(jsonlist)
         self._value = self._space.zeros()
-
 
     def name(self):
         return self._name
@@ -20,6 +15,9 @@ class Sensor(object):
     def value(self):
         return self._value
     
+    def sample(self):
+        return self_space.sample()
+
     def space(self):
         return self._space
 
@@ -30,8 +28,11 @@ class Sensor(object):
             max = float(jsonlist['max'])
             size = int(jsonlist['size'])
             self._space = Vector(min, max, size)
+        elif jsonlist['type'] == 'discrete':
+            n = int(jsonlist['range'])
+            self._space = Discrete(n)
         else: 
             raise Exception('Unknown sensor type')
         
-    def value_from_json(self, jsonstr):
+    def parse_to_json(self):
         pass

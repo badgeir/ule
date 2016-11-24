@@ -1,8 +1,5 @@
 
 import ule
 
-env = ule.Env()
-sens = env.connect()
-
-print(sens[0].name())
-print(sens[0].value())
+env = ule.load()
+image, sensors, reward, done, info = env.step(1)
