@@ -30,7 +30,7 @@ public class VectorSpace : Space {
 		json["type"] = "vector";
 		json["min"].AsFloat = mMinVal;
 		json["max"].AsFloat = mMaxVal;
-		json["length"].AsInt = mLength;
+		json["size"].AsInt = mLength;
 		return json;
 	}
 

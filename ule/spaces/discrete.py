@@ -23,7 +23,7 @@ class Discrete(Space):
         else:
             return False
         return as_int >= 0 and as_int < self.n
-    
+
     def name(self):
         return self.name
     def __repr__(self):

@@ -100,14 +100,15 @@ public class ReinforcementAgentTCPIface
 	{
 		JSONClass json = new JSONClass();
 
+        int idx = 0;
 		foreach (Sensor sens in sensors)
 		{
-			json.Add("sensors", sens.ToJson());
+			json["sensors"][idx] = sens.JsonDescription();
 		}
 
 		foreach (Motor motor in motors)
 		{
-			json.Add("motors", motor.ToJson());
+            json.Add("motors", motor.JsonDescription());
 		}
 
 		SendJson(json);
@@ -120,7 +121,7 @@ public class ReinforcementAgentTCPIface
 		foreach (Sensor sens in sensors)
 		{
 			sens.Sample();
-			json.Add("sensors", sens.ToJson());
+			json.Add("sensors", sens.SampleJson());
 		}
 		json["reward"].AsFloat = reward;
 

@@ -14,7 +14,12 @@ public class Motor : TickableObject {
         return false;
     }
 
-    public virtual JSONNode ToJson()
+    public virtual bool PushJson(JSONNode json)
+    {
+        return false;
+    }
+
+    public virtual JSONNode JsonDescription()
     {
         return null;
     }

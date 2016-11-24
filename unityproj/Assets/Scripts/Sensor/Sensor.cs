@@ -13,7 +13,12 @@ public class Sensor : MonoBehaviour {
     {
     }
 
-    public virtual JSONNode ToJson()
+    public virtual JSONNode SampleJson()
+    {
+        return null;
+    }
+
+    public virtual JSONNode JsonDescription()
     {
         return null;
     }

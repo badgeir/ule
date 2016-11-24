@@ -28,15 +28,19 @@ public class VectorSensor : Sensor {
 		return mName;
 	}
 
+    public override JSONNode JsonDescription()
+    {
+        JSONNode json = mVectorSpace.ToJSON();
+        json["name"] = mName;
+        return json;
+    }
 
-	public override JSONNode ToJson()
+	public override JSONNode SampleJson()
 	{
 		JSONClass json = new JSONClass();
-		json[mName] = mVectorSpace.ToJSON();
-
 		for (int i = 0; i < mLength; i++)
 		{
-			json[mName]["value"][i].AsFloat = mVector[i];
+			json[mName][i].AsFloat = mVector[i];
 		}
 		return json;
 	}

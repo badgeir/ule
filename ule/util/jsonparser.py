@@ -2,6 +2,7 @@
 import json
 import numpy as np
 
+from ule.sensors import Sensor
 from ule.spaces import Discrete, Vector
 
 def decodeFeedback(string):
@@ -30,22 +31,19 @@ def decodeObservations(sensors):
 
 def decodeSpaces(info):
     jsn = json.loads(info)
-    observationspace = {}
-    actionspace = {}
 
-    sensors = jsn['sensors']
+    jsonsensors = jsn['sensors']
     motors = jsn['motors']
 
+    sensors = []
+    actionspace = {}
+
     n_obs = 0
-    for name in sensors:
-        sensortype = sensors[name]['type']
-        if sensortype == 'vector':
-            length = int(sensors[name]['length'])
-            minval = float(sensors[name]['min'])
-            maxval = float(sensors[name]['max'])
-            observationspace[str(name)] = Vector(minval, maxval, length, name)
-        else:
-            raise Exception('Unknown sensor type')
+    for jsonsensor in jsonsensors:
+        try:
+            sensors.append(Sensor(jsonsensor))
+        except Exception as e:
+            print('Error decoding json sensors.')
 
     for name in motors:
         motortype = motors[name]['type']
@@ -60,4 +58,4 @@ def decodeSpaces(info):
         else:
             raise Exception('Unknown motor type')
     
-    return observationspace, actionspace
+    return sensors, actionspace

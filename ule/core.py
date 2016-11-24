@@ -31,7 +31,7 @@ class Env(object):
         
         self.reward_range = (-np.inf, np.inf)
         self.actionSpace = None
-        self.observationSpace = None
+        self.sensors = None
 
         self.hostIP = "127.0.0.1"
         self.actionPort = actionPort
@@ -50,7 +50,7 @@ class Env(object):
 
         # wait for handshake
         info = self.infoSock.recv(1024)
-        self.observationSpace, self.actionSpace = jsonparser.decodeSpaces(info)
+        self.sensors, self.actionSpace = jsonparser.decodeSpaces(info)
 
     def step(self, action):
         #send action
@@ -90,8 +90,8 @@ class Env(object):
     def configure(self, *args, **kwargs):
         return False
 
-    def observation_space(self):
-        return self.observationSpace
+    def sensors(self):
+        return self.sensors
     
     def action_space(self):
         return self.actionSpace

@@ -22,15 +22,21 @@ public class DiscreteActionMotor : Motor {
         return true;
     }
 
+    public override bool PushJson(JSONNode json)
+    {
+
+        return false;
+    }
+
     protected virtual void Act(int action)
     {
 
     }
 
-    public override JSONNode ToJson()
+    public override JSONNode JsonDescription()
     {
-        JSONClass json = new JSONClass();
-        json[mName] = mDiscreteSpace.ToJSON();
+        JSONNode json = mDiscreteSpace.ToJSON();
+        json["name"] = mName;
         return json;
     }
 }
