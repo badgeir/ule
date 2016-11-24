@@ -1,12 +1,11 @@
 import numpy as np
 import ule
+from ule.util import jsonparser
 
 def main():
     env = ule.load()
-    
-    for i in range(500):
-        observation, reward, status = env.step(np.random.randint(3))
-        print(observation['BallSensor'])
+    print(env.observation_space().sample())
+    print(env.action_space().sample())
     
     env.close()
 

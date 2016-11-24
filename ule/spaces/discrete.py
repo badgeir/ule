@@ -10,8 +10,9 @@ class Discrete(Space):
     Example usage:
     self.observation_space = spaces.Discrete(2)
     """
-    def __init__(self, n):
+    def __init__(self, n, name = ''):
         self.n = n
+        self.name = name
     def sample(self):
         return prng.np_random.randint(self.n)
     def contains(self, x):
@@ -22,6 +23,9 @@ class Discrete(Space):
         else:
             return False
         return as_int >= 0 and as_int < self.n
+    
+    def name(self):
+        return self.name
     def __repr__(self):
         return "Discrete(%d)" % self.n
     def __eq__(self, other):

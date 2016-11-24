@@ -11,173 +11,190 @@ using SimpleJSON;
 
 public class ReinforcementAgentTCPIface
 {
-    private bool mActionClientConnected, mImageClientConnected, mInfoClientConnected;
+	private bool mActionClientConnected, mImageClientConnected, mInfoClientConnected;
 
-    Thread mReceiveThread;
-    public string mLatestAction;
+	Thread mReceiveThread;
+	public string mLatestAction;
 
-    string mHostIP;
+	string mHostIP;
 
-    TcpListener mActionListener, mImageListener, mInfoListener;
-    TcpClient mActionClient, mImageClient, mInfoClient;
+	TcpListener mActionListener, mImageListener, mInfoListener;
+	TcpClient mActionClient, mImageClient, mInfoClient;
 
-    NetworkStream mImageStream, mInfoStream;
+	NetworkStream mImageStream, mInfoStream;
 
-    int mActionInputPort;
-    int mImagePort, mInfoPort;
+	int mActionInputPort;
+	int mImagePort, mInfoPort;
 
-    Action<string> mReceiveAction;
+	Action<string> mReceiveAction;
 
-    public ReinforcementAgentTCPIface(string hostIp, int actionport, int imageport, int infoport, Action<string> ReceiveActionCallback)
-    {
-        mActionClientConnected = false;
-        mImageClientConnected = false;
-        mInfoClientConnected = false;
+	public ReinforcementAgentTCPIface(string hostIp, int actionport, int imageport, int infoport, Action<string> ReceiveActionCallback)
+	{
+		mActionClientConnected = false;
+		mImageClientConnected = false;
+		mInfoClientConnected = false;
 
-        mHostIP = hostIp;
-        mActionInputPort = actionport;
-        mImagePort = imageport;
-        mInfoPort = infoport;
+		mHostIP = hostIp;
+		mActionInputPort = actionport;
+		mImagePort = imageport;
+		mInfoPort = infoport;
 
-        mReceiveAction = ReceiveActionCallback;
-    }
+		mReceiveAction = ReceiveActionCallback;
+	}
 
-    public void Connect()
-    {
-        TcpInit();
-    }
+	public void Connect()
+	{
+		TcpInit();
+	}
 
-    public bool Connected()
-    {
-        return (mActionClientConnected && mImageClientConnected && mInfoClientConnected);
-    }
+	public bool Connected()
+	{
+		return (mActionClientConnected && mImageClientConnected && mInfoClientConnected);
+	}
 
-    void TcpInit()
-    {
+	void TcpInit()
+	{
 
-        Thread imThread = new Thread(new ThreadStart(InitImageConnection));
-        imThread.Start();
+		Thread imThread = new Thread(new ThreadStart(InitImageConnection));
+		imThread.Start();
 
-        Thread infoThread = new Thread(new ThreadStart(InitInfoConnection));
-        infoThread.Start();
+		Thread infoThread = new Thread(new ThreadStart(InitInfoConnection));
+		infoThread.Start();
 
-        mReceiveThread = new Thread(new ThreadStart(ReceiveData));
-        mReceiveThread.IsBackground = true;
-        mReceiveThread.Start();
-    }
+		mReceiveThread = new Thread(new ThreadStart(ReceiveData));
+		mReceiveThread.IsBackground = true;
+		mReceiveThread.Start();
+	}
 
-    private void InitImageConnection()
-    {
-        mImageListener = new TcpListener(IPAddress.Parse(mHostIP), mImagePort);
-        mImageListener.Start();
-        mImageClient = mImageListener.AcceptTcpClient();
-        mImageStream = mImageClient.GetStream();
-        mImageClientConnected = true;
-    }
+	private void InitImageConnection()
+	{
+		mImageListener = new TcpListener(IPAddress.Parse(mHostIP), mImagePort);
+		mImageListener.Start();
+		mImageClient = mImageListener.AcceptTcpClient();
+		mImageStream = mImageClient.GetStream();
+		mImageClientConnected = true;
+	}
 
-    private void InitInfoConnection()
-    {
-        mInfoListener = new TcpListener(IPAddress.Parse(mHostIP), mInfoPort);
-        mInfoListener.Start();
-        mInfoClient = mInfoListener.AcceptTcpClient();
-        mInfoStream = mInfoClient.GetStream();
-        mInfoClientConnected = true;
-    }
+	private void InitInfoConnection()
+	{
+		mInfoListener = new TcpListener(IPAddress.Parse(mHostIP), mInfoPort);
+		mInfoListener.Start();
+		mInfoClient = mInfoListener.AcceptTcpClient();
+		mInfoStream = mInfoClient.GetStream();
+		mInfoClientConnected = true;
+	}
 
-    public void SendImage(byte[] bytes)
-    {
-        try
-        {
-            mImageStream.Write(bytes, 0, bytes.Length);
-        }
-        catch (Exception err)
-        {
-            UnityEngine.Debug.LogError(err.ToString());
-        }
-    }
+	public void SendImage(byte[] bytes)
+	{
+		try
+		{
+			mImageStream.Write(bytes, 0, bytes.Length);
+		}
+		catch (Exception err)
+		{
+			UnityEngine.Debug.LogError(err.ToString());
+		}
+	}
 
-    public void SendAvailableMotors(List<Motor> motors)
-    {
-        JSONClass json = new JSONClass();
-        foreach (Motor motor in motors)
-        {
-            json.Add("Motors", motor.ToJson());
-        }
+	public void SendEnvironmentInfo(List<Sensor> sensors, List<Motor> motors)
+	{
+		JSONClass json = new JSONClass();
 
-        SendJson(json);
-    }
+		foreach (Sensor sens in sensors)
+		{
+			json.Add("sensors", sens.ToJson());
+		}
 
-    public void SendInfo(float reward, int gamestatus, List<Sensor> sensors)
-    {
-        JSONClass json = new JSONClass();
-        json["reward"]["type"] = "float";
-        json["reward"]["value"].AsFloat = reward;
+		foreach (Motor motor in motors)
+		{
+			json.Add("motors", motor.ToJson());
+		}
 
-        json["status"]["type"] = "int";
-        json["status"]["value"].AsInt = gamestatus;
+		SendJson(json);
+	}
 
-        foreach(Sensor sens in sensors)
-        {
-            sens.Sample();
-            json.Add("observation", sens.ToJson());
-        }
+	public void SendInfo(float reward, int gamestatus, List<Sensor> sensors, List<string> info = null)
+	{
+		JSONClass json = new JSONClass();
 
-        SendJson(json);
-    }
+		foreach (Sensor sens in sensors)
+		{
+			sens.Sample();
+			json.Add("sensors", sens.ToJson());
+		}
 
-    public void SendJson(JSONClass json)
-    {
-        byte[] bytes = Encoding.UTF8.GetBytes(json.ToString());
-        mInfoStream.Write(bytes, 0, bytes.Length);
-    }
+		json["reward"].AsFloat = reward;
+		
+		json["done"].AsInt = gamestatus;
 
-    private void ReceiveData()
-    {
-        IPAddress address = IPAddress.Parse(mHostIP);
-        mActionListener = new TcpListener(address, mActionInputPort);
-        mActionListener.Start();
+		if(info == null)
+		{
+			json["info"] = null;
+		}
+		else
+		{
+			foreach(string msg in info)
+			{
+				json["info"][0] = msg;
+			}
+		}
 
-        mActionClient = mActionListener.AcceptTcpClient();
+		SendJson(json);
+	}
 
-        NetworkStream nwStream = mActionClient.GetStream();
-        mActionClientConnected = true;
+	public void SendJson(JSONClass json)
+	{
+		byte[] bytes = Encoding.UTF8.GetBytes(json.ToString());
+		mInfoStream.Write(bytes, 0, bytes.Length);
+	}
 
-        byte[] buffer = new byte[mActionClient.ReceiveBufferSize];
+	private void ReceiveData()
+	{
+		IPAddress address = IPAddress.Parse(mHostIP);
+		mActionListener = new TcpListener(address, mActionInputPort);
+		mActionListener.Start();
 
-        while (true)
-        {
+		mActionClient = mActionListener.AcceptTcpClient();
 
-            try
-            {
-                int bytesRead = nwStream.Read(buffer, 0, mActionClient.ReceiveBufferSize);
-                if(bytesRead > 0)
-                {
-                    mLatestAction = Encoding.UTF8.GetString(buffer);
-                    mReceiveAction(mLatestAction);
-                }
-            }
-            catch (Exception err)
-            {
-                //UnityEngine.Debug.Log(err.ToString());
-            }
+		NetworkStream nwStream = mActionClient.GetStream();
+		mActionClientConnected = true;
 
-            Thread.Sleep(10);
-        }
-    }
+		byte[] buffer = new byte[mActionClient.ReceiveBufferSize];
 
-    public void Close()
-    {
-        mReceiveThread.Abort();
-        mReceiveThread.Join();
+		while (true)
+		{
 
-        mActionClient.Close();
-        mActionListener.Stop();
+			try
+			{
+				int bytesRead = nwStream.Read(buffer, 0, mActionClient.ReceiveBufferSize);
+				if(bytesRead > 0)
+				{
+					mLatestAction = Encoding.UTF8.GetString(buffer);
+					mReceiveAction(mLatestAction);
+				}
+			}
+			catch (Exception err)
+			{
+				//UnityEngine.Debug.Log(err.ToString());
+			}
 
-        mImageClient.Close();
-        mImageListener.Stop();
+			Thread.Sleep(10);
+		}
+	}
 
-        mInfoClient.Close();
-        mInfoListener.Stop();
-    }
+	public void Close()
+	{
+		mReceiveThread.Abort();
+		mReceiveThread.Join();
+
+		mActionClient.Close();
+		mActionListener.Stop();
+
+		mImageClient.Close();
+		mImageListener.Stop();
+
+		mInfoClient.Close();
+		mInfoListener.Stop();
+	}
 
 }

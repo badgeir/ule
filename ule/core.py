@@ -9,7 +9,7 @@ import sys
 import io
 
 import ule
-from ule.util import jsonutil
+from ule.util import jsonparser
 from ule.spaces import Vector
 
 def load(name='none', connectToRunning=True):
@@ -30,8 +30,8 @@ class Env(object):
         self.configured = False
         
         self.reward_range = (-np.inf, np.inf)
-        self.action_space = None
-        self.observation_space = None
+        self.actionSpace = None
+        self.observationSpace = None
 
         self.hostIP = "127.0.0.1"
         self.actionPort = actionPort
@@ -50,6 +50,7 @@ class Env(object):
 
         # wait for handshake
         info = self.infoSock.recv(1024)
+        self.observationSpace, self.actionSpace = jsonparser.decodeSpaces(info)
 
     def step(self, action):
         #send action
@@ -68,7 +69,7 @@ class Env(object):
             print('not an image')
         
         # decode json string
-        info = jsonutil.decodeJsonStr(infostr)
+        info = jsonparser.decodeJsonStr(infostr)
 
         # package image and additional observations (if they exist) in a struct
         observation = {}
@@ -101,6 +102,12 @@ class Env(object):
 
     def configure(self, *args, **kwargs):
         return False
+
+    def observation_space(self):
+        return self.observationSpace
+    
+    def action_space(self):
+        return self.actionSpace
 
     def __del__(self):
         self.close()

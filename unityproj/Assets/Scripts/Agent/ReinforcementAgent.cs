@@ -32,12 +32,11 @@ public class ReinforcementAgent : MonoBehaviour {
             yield return new WaitForSeconds(0.1f);
         }
         // oneway handshake, tell client it's ok to start sending actions
-        mIface.SendAvailableMotors(mMotors);
+        mIface.SendEnvironmentInfo(mSensors, mMotors);
     }
 
     public void PerformActions(string actions)
     {
-
         foreach(Motor m in mMotors)
         {
             m.SetOutput(int.Parse(actions));
