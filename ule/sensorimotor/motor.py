@@ -39,3 +39,8 @@ class Motor(object):
         
     def parse_to_json(self):
         pass
+
+    def __repr__(self):
+        return self._space.__repr__() + ' Motor: %s'%str(self._value)
+    def __str__(self):
+        return self._space.__repr__() + ' Motor: %s'%str(self._value)

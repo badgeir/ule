@@ -2,5 +2,8 @@
 import ule
 
 env = ule.load()
-image, sensors, reward, done, info = env.step(1)
+s = env.sensors()
+m = env.motors()
 
+print(s[0])
+print(m[0])

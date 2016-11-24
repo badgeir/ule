@@ -30,3 +30,8 @@ class Sensor(object):
         
     def value_from_json(self, jsonstr):
         self._value = self._space.from_json(jsonstr)
+
+    def __repr__(self):
+        return self._space.__repr__() + ' Sensor: %s'%str(self._value)
+    def __str__(self):
+        return self._space.__repr__() + ' Sensor: %s'%str(self._value)

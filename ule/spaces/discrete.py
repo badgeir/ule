@@ -26,7 +26,7 @@ class Discrete(Space):
         else:
             return False
         return as_int >= 0 and as_int < self.n
-
+    
     def __repr__(self):
         return "Discrete(%d)" % self.n
     def __eq__(self, other):
