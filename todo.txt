@@ -1,6 +1,13 @@
+.py:
 - implement parseMotors, and send motor actions in the form of json to unity env
-- Motor.PushJson (.cs) should accept json as input and set output accordingly
 
+.cs:
+- Motor.PushJson (.cs) should accept json as input and set output accordingly
+- implement VectorSpace.Contains()
+- SampleJson should call Sample in Sensors, not external
+- Implement VectorMotor.cs
+
+general:
 - ule.load should execute Unity in batchmode in 'load' method
 - ule.load should build executable (to latest changes eventually) if not already built
 
