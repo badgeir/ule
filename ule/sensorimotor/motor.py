@@ -15,8 +15,11 @@ class Motor(object):
     def value(self):
         return self._value
     
-    def sample(self):
-        return self._space.sample()
+    def set_value(self, value):
+        self._value = value
+
+    def randomize(self):
+        self._value = self._space.sample()
 
     def space(self):
         return self._space

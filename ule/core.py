@@ -52,9 +52,9 @@ class Env(object):
         info = self.infoSock.recv(1024)
         self._sensors, self._motors = jsonparser.parseSensorsAndMotors(info)
 
-    def step(self, action):
+    def step(self, motors):
         #send action
-        self.actionSock.send(str(action))
+        self.actionSock.send(str(motors))
 
         #receive image from environment
         imgbytes = self.imageSock.recv(10000)
