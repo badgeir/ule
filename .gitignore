@@ -5,3 +5,4 @@ unityproj/Temp
 unityproj/obj
 *.csproj
 *.suo
+env.bat
