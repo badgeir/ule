@@ -9,8 +9,8 @@ def parseFeedback(string, sensors):
     jsonlst = json.loads(string)
     
     #modify sensors directly
-    parseSensors(jsonlst['sensors'], sensors)
-    
+    updateSensors(jsonlst['sensors'], sensors)
+
     reward = int(jsonlst['reward'])
     done = int(jsonlst['done'])
     
@@ -18,7 +18,7 @@ def parseFeedback(string, sensors):
 
     return reward, done, info
 
-def parseSensors(jsonsensors, sensors):
+def updateSensors(jsonsensors, sensors):
     for name in jsonsensors:
         for sensor in sensors:
             if sensor.name() == name:
@@ -40,6 +40,10 @@ def parseSensorsAndMotors(info):
             print('Error decoding json sensors.')
 
     for jsonmotor in jsonmotors:
-        motors.append(Motor(jsonmotor))
+        try:
+            motors.append(Motor(jsonmotor))
+        except Exception as e:
+            print('Error decoding json motors.')
+        
     
     return sensors, motors
