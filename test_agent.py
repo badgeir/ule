@@ -1,6 +1,5 @@
 import numpy as np
 import ule
-from ule.util import jsonparser
 
 def main():
     env = ule.load()
