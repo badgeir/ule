@@ -9,11 +9,6 @@ public class Motor : TickableObject {
         return "";
     }
 
-    public virtual bool SetOutput(object output)
-    {
-        return false;
-    }
-
     public virtual bool PushJson(JSONNode json)
     {
         return false;

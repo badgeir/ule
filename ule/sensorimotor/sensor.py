@@ -29,7 +29,7 @@ class Sensor(object):
             raise Exception('Unknown sensor type')
         
     def value_from_json(self, jsonstr):
-        self._value = self._space.from_json(jsonstr)
+        self._value = self._space.from_jsonable(jsonstr)
 
     def __repr__(self):
         return self._space.__repr__() + ' Sensor: %s'%str(self._value)

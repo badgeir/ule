@@ -44,6 +44,18 @@ def parseSensorsAndMotors(info):
             motors.append(Motor(jsonmotor))
         except Exception as e:
             print('Error decoding json motors.')
-        
     
     return sensors, motors
+
+def motorsToJson(motors):
+    jmsg = {}
+
+    jmsg['method'] = 'updateEnvironment'
+    jmsg['parameters'] = {}
+    jmsg['parameters']['motors'] = []
+
+    for i in range(len(motors)):
+        motorstr = motors[i].to_jsonable()
+        jmsg['parameters']['motors'].append(motorstr)
+    
+    return json.dumps(jmsg)

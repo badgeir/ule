@@ -27,6 +27,11 @@ class Discrete(Space):
             return False
         return as_int >= 0 and as_int < self.n
     
+    def to_jsonable(self, sample_n):
+        return sample_n
+    def from_jsonable(self, sample_n):
+        pass
+
     def __repr__(self):
         return "Discrete(%d)" % self.n
     def __eq__(self, other):

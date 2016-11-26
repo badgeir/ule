@@ -6,13 +6,13 @@ def main():
     sensors = env.sensors()
     motors = env.motors()
 
-    for i in range(500):
+    print(motors)
 
+    for i in range(100):
         for motor in motors:
-            #motor.randomize()
-            motor.set_value(motor.space().sample())
-        
-        image, sensors, reward, done, info = env.step(motors)
+            motor.randomize()
+
+        reward, done, info = env.step()
 
         for sensor in sensors:
             print('%s: %s'%(sensor.name(), str(sensor.value())))

@@ -31,9 +31,9 @@ class Vector(Space):
     def contains(self, x):
         return x.size == self.size and (x >= self.low).all() and (x <= self.high).all()
 
-    def to_json(self, sample_n):
+    def to_jsonable(self, sample_n):
         return np.array(sample_n).tolist()
-    def from_json(self, sample_n):
+    def from_jsonable(self, sample_n):
         return np.array(sample_n).astype('float')
 
     @property

@@ -37,8 +37,11 @@ class Motor(object):
         else: 
             raise Exception('Unknown sensor type')
         
-    def parse_to_json(self):
-        pass
+    def to_jsonable(self):
+        jsn = {}
+        jsn['name'] = self._name
+        jsn['value'] = self._space.to_jsonable(self._value)
+        return jsn
 
     def __repr__(self):
         return self._space.__repr__() + ' Motor: %s'%str(self._value)

@@ -2,21 +2,28 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using SimpleJSON;
+
+using ULE;
 
 public class SceneManager : MonoBehaviour {
 
     enum GameStatus {StatusOK, GameOver};
-
-    public ReinforcementAgent mAgent;
-    public VirtualCamera mCamera;
-
-    float mAccumulatedReward;
     GameStatus mGameStatus;
 
+    float mReward = 0;
+
+    public ReinforcementAgent mAgent;
+
+    float mAccumulatedReward;
     private List<TickableObject> mActiveObjects;
 
-    private Queue<string> mActionQueue;
+    private Queue<string> mPendingMessages;
 
+    ULEServer mServer;
+    UleParser mParser;
+
+    bool mMotorsUpdated;
 
     void Awake () {
         mGameStatus = GameStatus.StatusOK;
@@ -24,38 +31,97 @@ public class SceneManager : MonoBehaviour {
 
         mActiveObjects = new List<TickableObject>();
 
-        mActionQueue = new Queue<string>();
+        mParser = new UleParser(OnGetEnvironment, OnUpdateMotor);
+
+        mServer = new ULEServer("127.0.0.1", 3000);
+        mServer.Connect(OnClientConnected);
+
+        mPendingMessages = new Queue<string>();
+
+        mMotorsUpdated = false;
     }
 
     void Update()
     {
-        // check if new action has been added to queue
-        if(mActionQueue.Count > 0)
+        if (mPendingMessages.Count > 0)
         {
-            mAgent.PerformActions(mActionQueue.Dequeue());
+            mParser.ParseInput(mPendingMessages.Dequeue());
 
-            TickAllTickableObjects();
+            if (mMotorsUpdated)
+            {
+                Tick();
+                SendFeedback();
 
-            mAgent.SendReinforcementFeedback((int)mGameStatus);
+                mMotorsUpdated = false;
+            }
         }
     }
 
-    void TickAllTickableObjects()
+    public void OnClientConnected()
+    {
+        Debug.Log("Client connected.");
+        mServer.StartReceiving(OnClientRequest, OnClientDisconnected);
+    }
+
+    public void OnClientDisconnected()
+    {
+        Debug.Log("Client disconnected.");
+        mServer.Connect(OnClientConnected);
+    }
+
+    public void OnClientRequest(string msg)
+    {
+        mPendingMessages.Enqueue(msg);
+    }
+
+    public void OnGetEnvironment()
+    {
+        JSONClass json = new JSONClass();
+
+        int idx = 0;
+        foreach (Sensor sens in mAgent.mSensors)
+        {
+            json["sensors"][idx] = sens.JsonDescription();
+        }
+
+        idx = 0;
+        foreach (Motor motor in mAgent.mMotors)
+        {
+            json["motors"][idx] = motor.JsonDescription();
+        }
+
+        mServer.SendJson(json);
+    }
+
+    public void OnUpdateMotor(JSONNode motor)
+    {
+        mMotorsUpdated = true;
+        mAgent.UpdateMotor(motor);
+    }
+
+    public void SendFeedback()
+    {
+        JSONClass json = new JSONClass();
+
+        foreach (Sensor sens in mAgent.mSensors)
+        {
+            sens.Sample();
+            json.Add("sensors", sens.SampleJson());
+        }
+        json["reward"].AsFloat = mReward;
+        json["done"].AsInt = (int)mGameStatus;
+
+        json["info"] = "";
+
+        mServer.SendJson(json);
+    }
+
+    void Tick()
     {
         foreach (TickableObject obj in mActiveObjects)
         {
             obj.Tick();
         }
-    }
-
-    public void QueueAction(string action)
-    {
-        mActionQueue.Enqueue(action);
-    }
-
-    string DequeueAction()
-    {
-        return mActionQueue.Dequeue();
     }
 
     public void AddActiveObject(TickableObject obj)
@@ -66,6 +132,11 @@ public class SceneManager : MonoBehaviour {
     public void GameOver()
     {
 
+    }
+
+    public void OnDestroy()
+    {
+        mServer.Close();
     }
 
 }

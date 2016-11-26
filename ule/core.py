@@ -8,6 +8,8 @@ import sys
 
 import io
 
+import json
+
 import ule
 from ule.util import jsonparser
 from ule.spaces import Vector
@@ -25,7 +27,7 @@ def start(name):
     return False
 
 class Env(object):
-    def __init__(self, hostIP="127.0.0.1", actionPort=3000, imagePort=3001, infoPort=3002):
+    def __init__(self, hostIP="127.0.0.1", port=3000):
         self.closed = False
         self.configured = False
         
@@ -34,44 +36,40 @@ class Env(object):
         self._sensors = None
 
         self.hostIP = "127.0.0.1"
-        self.actionPort = actionPort
-        self.imagePort = imagePort
-        self.infoPort = infoPort
+        self.port = port
     
     def connect(self):
-        self.actionSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.actionSock.connect((self.hostIP, self.actionPort))
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.connect((self.hostIP, self.port))
 
-        self.imageSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.imageSock.connect((self.hostIP, self.imagePort))
+        # get environment info
+        msg = {}
+        msg["method"] = "getEnvironmentInfo"
+        self.sock.send(json.dumps(msg))
 
-        self.infoSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.infoSock.connect((self.hostIP, self.infoPort))
-
-        # wait for handshake
-        info = self.infoSock.recv(1024)
+        info = self.sock.recv(1024)
         self._sensors, self._motors = jsonparser.parseSensorsAndMotors(info)
 
-    def step(self, motors):
+    def step(self):
+        
         #send action
-        #jsonmotors = jsonparser.parseMotors(motors)
-
-        self.actionSock.send(str(motors[0].value()))
+        jsonmotors = jsonparser.motorsToJson(self._motors)
+        self.sock.send(jsonmotors)
 
         #receive image from environment
-        imgbytes = self.imageSock.recv(10000)
+        #imgbytes = self.imageSock.recv(10000)
 
         #receive other info from environment
-        feedback = self.infoSock.recv(1024)
+        feedback = self.sock.recv(1024)
 
-        img = None
-        try:
-            img = mpimg.imread(io.BytesIO(imgbytes))
-        except Exception as e:
-            print('not an image')
+        # img = None
+        # try:
+        #     img = mpimg.imread(io.BytesIO(imgbytes))
+        # except Exception as e:
+        #     print('not an image')
         
         reward, done, info = jsonparser.parseFeedback(feedback, self._sensors)
-        return img, self._sensors, reward, done, info
+        return reward, done, info
 
 
     def reset(self):
@@ -79,9 +77,7 @@ class Env(object):
         return observation
 
     def close(self):
-        self.actionSock.close()
-        self.imageSock.close()
-        self.infoSock.close()
+        self.sock.close()
         self.closed = True
 
     def seed(self, seed=None):

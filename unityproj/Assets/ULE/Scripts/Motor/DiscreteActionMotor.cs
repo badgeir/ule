@@ -14,18 +14,34 @@ public class DiscreteActionMotor : Motor {
         mDiscreteSpace = new DiscreteSpace(mNumActions);   
     }
 
-    public override bool SetOutput(object value)
-    {
-        if(mDiscreteSpace.Contains(value))
-        Act((int)value);
-
-        return true;
-    }
-
     public override bool PushJson(JSONNode json)
     {
+        bool status = true;
 
-        return false;
+        JSONNode value = json["value"];
+
+        if(value != null)
+        {
+            try
+            {
+                int action = value.AsInt;
+                Act(action);
+            }
+            catch
+            {
+                status = false;
+            }
+        }
+        else
+        {
+            status = false;
+        }
+        return status;
+    }
+
+    public override string name()
+    {
+        return mName;
     }
 
     protected virtual void Act(int action)
