@@ -30,7 +30,7 @@ public class Ball : MonoBehaviour
                     mHorizontalSpeed = -mHorizontalSpeed;
                     break;
                 }
-            case "Opponend":
+            case "Opponent":
                 mHorizontalSpeed = -mHorizontalSpeed;
                 break;
             case "Edge":
