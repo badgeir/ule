@@ -8,7 +8,7 @@ def main():
 
     print(motors)
 
-    for i in range(10):
+    for i in range(500):
         for motor in motors:
             motor.randomize()
 

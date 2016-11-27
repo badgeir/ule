@@ -6,13 +6,13 @@ using System.Text;
 using SimpleJSON;
 
 
-class UleParser
+class UleRPC
 {
 
     Action mOnGetEnvironment;
     Action<JSONNode> mMotorUpdater;
 
-    public UleParser(Action onGetEnvironment, Action<JSONNode> motorUpdater)
+    public UleRPC(Action onGetEnvironment, Action<JSONNode> motorUpdater)
     {
         mOnGetEnvironment = onGetEnvironment;
         mMotorUpdater = motorUpdater;
@@ -37,6 +37,11 @@ class UleParser
                 updateEnvironment(parameters);
                 break;
             }
+            case "restart":
+            {
+                restart();
+                break;
+            }
             default: break;
         }
     }
@@ -47,6 +52,11 @@ class UleParser
         {
             mMotorUpdater(json["motors"][motor]);
         }
+    }
+
+    void restart()
+    {
+
     }
 
 

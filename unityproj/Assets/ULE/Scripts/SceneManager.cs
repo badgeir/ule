@@ -22,7 +22,7 @@ public class SceneManager : MonoBehaviour {
     private Queue<string> mPendingMessages;
 
     ULEServer mServer;
-    UleParser mParser;
+    UleRPC mUleRPC;
 
     bool mMotorsUpdated;
 
@@ -32,7 +32,7 @@ public class SceneManager : MonoBehaviour {
 
         mActiveObjects = new List<TickableObject>();
 
-        mParser = new UleParser(OnGetEnvironment, OnUpdateMotor);
+        mUleRPC = new UleRPC(OnGetEnvironment, OnUpdateMotor);
 
         mServer = new ULEServer("127.0.0.1", 3000);
         mServer.Connect(OnClientConnected);
@@ -47,16 +47,13 @@ public class SceneManager : MonoBehaviour {
         if (mPendingMessages.Count > 0)
         {
 
-            mParser.ParseInput(mPendingMessages.Dequeue());
+            mUleRPC.ParseInput(mPendingMessages.Dequeue());
             if (mMotorsUpdated)
             {
+                //Update all movable objects
                 Tick();
 
-                var watch = System.Diagnostics.Stopwatch.StartNew();
                 SendFeedback();
-                watch.Stop();
-                var elapsed = watch.ElapsedMilliseconds;
-                UnityEngine.Debug.Log(elapsed);
 
                 mMotorsUpdated = false;
             }
