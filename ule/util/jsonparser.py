@@ -34,10 +34,10 @@ def parseSensorsAndMotors(info):
     motors = []
 
     for jsonsensor in jsonsensors:
-        #try:
-        sensors.append(Sensor(jsonsensor))
-        #except Exception as e:
-        #    print('Error decoding json sensors.')
+        try:
+            sensors.append(Sensor(jsonsensor))
+        except Exception as e:
+           print('Error decoding json sensors.')
 
     for jsonmotor in jsonmotors:
         try:
