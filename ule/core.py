@@ -1,6 +1,5 @@
 import sys
 import numpy as np
-from matplotlib import image as mpimg
 
 import socket
 import os
@@ -47,7 +46,7 @@ class Env(object):
         msg["method"] = "getEnvironmentInfo"
         self.sock.send(json.dumps(msg))
 
-        info = self.sock.recv(1024)
+        info = self.sock.recv(16384)
         self._sensors, self._motors = jsonparser.parseSensorsAndMotors(info)
 
     def step(self):
@@ -60,16 +59,10 @@ class Env(object):
         #imgbytes = self.imageSock.recv(10000)
 
         #receive other info from environment
-        feedback = self.sock.recv(1024)
+        feedback = self.sock.recv(16384)
 
-        # img = None
-        # try:
-        #     img = mpimg.imread(io.BytesIO(imgbytes))
-        # except Exception as e:
-        #     print('not an image')
-        
-        reward, done, info = jsonparser.parseFeedback(feedback, self._sensors)
-        return reward, done, info
+        img, reward, done, info = jsonparser.parseFeedback(feedback, self._sensors)
+        return img, reward, done, info
 
 
     def reset(self):

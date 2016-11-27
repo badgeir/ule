@@ -5,18 +5,29 @@ import numpy as np
 from ule.sensorimotor import Sensor, Motor
 from ule.spaces import Discrete, Vector
 
+import io
+from matplotlib import image as mpimg
+
 def parseFeedback(string, sensors):
     jsonlst = json.loads(string)
     
     #modify sensors directly
     updateSensors(jsonlst['sensors'], sensors)
 
+    imgbytes = jsonlst['image'].decode('base64')
+
+    img = None
+    try:
+        img = mpimg.imread(io.BytesIO(imgbytes))
+    except Exception as e:
+        print('not an image')
+
     reward = int(jsonlst['reward'])
     done = int(jsonlst['done'])
     
     info = jsonlst['info']
 
-    return reward, done, info
+    return img, reward, done, info
 
 def updateSensors(jsonsensors, sensors):
     for name in jsonsensors:

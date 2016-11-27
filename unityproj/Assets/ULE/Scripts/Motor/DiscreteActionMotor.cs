@@ -5,7 +5,7 @@ using SimpleJSON;
 public class DiscreteActionMotor : Motor {
 
     public string mName;
-    public int mNumActions;
+    protected int mNumActions;
 
     private DiscreteSpace mDiscreteSpace;
 

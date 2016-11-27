@@ -121,7 +121,6 @@ public class ReinforcementAgentTCPIface
 
 		foreach (Sensor sens in sensors)
 		{
-			sens.Sample();
 			json.Add("sensors", sens.SampleJson());
 		}
 		json["reward"].AsFloat = reward;
@@ -175,7 +174,7 @@ public class ReinforcementAgentTCPIface
 			}
 			catch (Exception err)
 			{
-				//UnityEngine.Debug.Log(err.ToString());
+				UnityEngine.Debug.Log(err.ToString());
 			}
 
 			Thread.Sleep(10);

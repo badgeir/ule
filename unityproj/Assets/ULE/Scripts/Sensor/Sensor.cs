@@ -9,7 +9,7 @@ public class Sensor : MonoBehaviour {
         return "";
     }
 
-    public virtual void Sample()
+    protected virtual void Sample()
     {
     }
 

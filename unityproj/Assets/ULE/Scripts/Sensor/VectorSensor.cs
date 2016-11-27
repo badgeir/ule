@@ -37,6 +37,8 @@ public class VectorSensor : Sensor {
 
 	public override JSONNode SampleJson()
 	{
+        Sample();
+
 		JSONClass json = new JSONClass();
 		for (int i = 0; i < mLength; i++)
 		{

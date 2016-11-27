@@ -8,14 +8,14 @@ def main():
 
     print(motors)
 
-    for i in range(100):
+    for i in range(10):
         for motor in motors:
             motor.randomize()
 
         reward, done, info = env.step()
 
         for sensor in sensors:
-            print('%s: %s'%(sensor.name(), str(sensor.value())))
+            print(sensor.value())
    
     env.close()
 

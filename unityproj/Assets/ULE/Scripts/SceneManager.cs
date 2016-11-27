@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using SimpleJSON;
+using System.Text;
 
 using ULE;
 
@@ -81,13 +82,13 @@ public class SceneManager : MonoBehaviour {
         int idx = 0;
         foreach (Sensor sens in mAgent.mSensors)
         {
-            json["sensors"][idx] = sens.JsonDescription();
+            json["sensors"][idx++] = sens.JsonDescription();
         }
 
         idx = 0;
         foreach (Motor motor in mAgent.mMotors)
         {
-            json["motors"][idx] = motor.JsonDescription();
+            json["motors"][idx++] = motor.JsonDescription();
         }
 
         mServer.SendJson(json);
@@ -105,9 +106,9 @@ public class SceneManager : MonoBehaviour {
 
         foreach (Sensor sens in mAgent.mSensors)
         {
-            sens.Sample();
             json.Add("sensors", sens.SampleJson());
         }
+
         json["reward"].AsFloat = mReward;
         json["done"].AsInt = (int)mGameStatus;
 

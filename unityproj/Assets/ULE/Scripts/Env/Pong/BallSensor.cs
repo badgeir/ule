@@ -9,7 +9,7 @@ public class BallSensor : VectorSensor {
 		base.Init();
 	}
 
-	public override void Sample()
+	protected override void Sample()
 	{
 		mVector[0] = transform.position.x;
 		mVector[1] = transform.position.y;
