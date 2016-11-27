@@ -20,8 +20,6 @@ public class ReinforcementAgent : MonoBehaviour {
 
     private Queue<string> mPendingMessages;
 
-    private List<TickableObject> mTickableObjects;
-
     ULEServer mServer;
     UleRPC mUleRPC;
 
@@ -54,8 +52,6 @@ public class ReinforcementAgent : MonoBehaviour {
 
         mGameStatus = GameStatus.StatusOK;
         mAccumulatedReward = 0;
-
-        mTickableObjects = new List<TickableObject>();
 
         mUleRPC = new UleRPC(OnGetEnvironment, OnUpdateMotor, Reset);
 
@@ -124,11 +120,6 @@ public class ReinforcementAgent : MonoBehaviour {
         yield return new WaitForFixedUpdate();
 
         Time.timeScale = 0;
-    }
-
-    public void AddTickableObject(TickableObject obj)
-    {
-        mTickableObjects.Add(obj);
     }
 
     public void AddReward(float reward)
@@ -209,7 +200,6 @@ public class ReinforcementAgent : MonoBehaviour {
         mGameStatus = GameStatus.StatusOK;
         mAccumulatedReward = 0;
 
-        mTickableObjects = new List<TickableObject>();
         mMotorsUpdated = false;
 
         mSensors.Clear();

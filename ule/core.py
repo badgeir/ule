@@ -66,6 +66,9 @@ class Env(object):
         reset = {}
         reset['method'] = 'reset'
         self.sock.send(json.dumps(reset))
+        feedback = self.sock.recv(16384)
+        jsonparser.parseFeedback(feedback, self._sensors)
+
 
     def close(self):
         self.sock.close()
