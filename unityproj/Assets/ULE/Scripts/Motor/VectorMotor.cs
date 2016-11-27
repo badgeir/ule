@@ -2,16 +2,18 @@
 using System.Collections;
 using SimpleJSON;
 
-public class DiscreteActionMotor : Motor {
+public class VectorMotor : Motor {
 
     public string mName;
-    protected int mNumActions;
+    public int mLength;
+    public float mMinVal;
+    public float mMaxVal;
 
-    private DiscreteSpace mDiscreteSpace;
+    private VectorSpace mVectorSpace;
 
     protected void Init()
     {
-        mDiscreteSpace = new DiscreteSpace(mNumActions);   
+        mVectorSpace = new VectorSpace(mLength, mMinVal, mMaxVal);
     }
 
     public override bool PushJson(JSONNode json)
@@ -20,14 +22,20 @@ public class DiscreteActionMotor : Motor {
 
         JSONNode value = json["value"];
 
-        if(value != null)
+        if (value != null)
         {
             try
             {
-                int action = value.AsInt;
-                if(mDiscreteSpace.Contains(action))
+                if(value.Count != mLength)
                 {
-                    Act(action);
+                    return false;
+                }
+
+                float[] vec = new float[mLength];
+                for (int i = 0; i < mLength; i++ )
+                {
+                    vec[i] = value[i].AsFloat;
+                    Act(vec);
                 }
             }
             catch
@@ -49,7 +57,7 @@ public class DiscreteActionMotor : Motor {
 
     public override JSONNode JsonDescription()
     {
-        JSONNode json = mDiscreteSpace.ToJSON();
+        JSONNode json = mVectorSpace.ToJSON();
         json["name"] = mName;
         return json;
     }

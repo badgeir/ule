@@ -5,9 +5,10 @@ using SimpleJSON;
 
 public class ReinforcementAgent : MonoBehaviour {
 
-    public VirtualCamera mCamera;
     public List<Sensor> mSensors;
     public List<Motor> mMotors;
+
+    private float mAccumulatedReward;
 
     public void UpdateMotor(JSONNode motor)
     {

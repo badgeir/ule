@@ -17,6 +17,7 @@ public class SceneManager : MonoBehaviour {
     public ReinforcementAgent mAgent;
 
     float mAccumulatedReward;
+
     private List<TickableObject> mActiveObjects;
 
     private Queue<string> mPendingMessages;
@@ -54,8 +55,11 @@ public class SceneManager : MonoBehaviour {
                 //Update all movable objects
                 Tick();
 
+
+
                 SendFeedback();
 
+                mAccumulatedReward = 0;
                 mMotorsUpdated = false;
             }
 
@@ -108,19 +112,20 @@ public class SceneManager : MonoBehaviour {
     {
         // Optimization. JSONNode.ToString() used 160 ms when parsing image. By writing out the json string
         // "by hand", I got it down to 2 ms.
-        string jsonstring = "{{\"sensors\": [{0}], \"reward\": \"{1}\", \"done\": \"{2}\", \"info\": {3}}}";
+        string jsonstring = "{{\"sensors\": [{0}], \"reward\": \"{1}\", \"done\": \"{2}\", \"info\": \"{3}\"}}";
         string sensors = "";
         int idx = 0;
         foreach (Sensor sens in mAgent.mSensors)
-        {   
+        {
             if (idx++ != 0)
             {
                 sensors += ", ";
             }
             sensors += sens.SampleJson();
         }
+        string info = "";
 
-        string output = string.Format(jsonstring, sensors, mReward, (int)mGameStatus, "\"\"");
+        string output = string.Format(jsonstring, sensors, mReward, (int)mGameStatus, info);
         mServer.SendResponse(output);
     }
 
@@ -137,9 +142,14 @@ public class SceneManager : MonoBehaviour {
         mActiveObjects.Add(obj);
     }
 
+    public void AddReward(float reward)
+    {
+        mAccumulatedReward += reward;
+    }
+
     public void GameOver()
     {
-
+        mGameStatus = GameStatus.GameOver;
     }
 
     public void OnDestroy()

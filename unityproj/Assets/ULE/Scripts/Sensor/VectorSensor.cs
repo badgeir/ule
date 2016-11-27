@@ -5,7 +5,7 @@ using SimpleJSON;
 
 public class VectorSensor : Sensor {
 
-	protected string mName;
+	public string mName;
 
 	public int mLength;
 	public float mMinVal, mMaxVal;

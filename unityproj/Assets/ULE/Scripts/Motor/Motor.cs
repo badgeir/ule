@@ -19,4 +19,14 @@ public class Motor : TickableObject {
         return null;
     }
 
+    protected virtual void Act(int action)
+    {
+
+    }
+    
+    protected virtual void Act(float[] action)
+    {
+
+    }
+
 }

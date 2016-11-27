@@ -4,8 +4,6 @@ using System.Collections;
 public class BallSensor : VectorSensor {
 
 	void Start () {
-		mName = "BallSensor";
-		mLength = 3;
 		base.Init();
 	}
 
