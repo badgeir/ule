@@ -28,11 +28,38 @@ public class Ball : MonoBehaviour
                     ReinforcementAgent agent = GameObject.Find("Agent").GetComponent<ReinforcementAgent>();
                     agent.AddReward(1);
                     mHorizontalSpeed = -mHorizontalSpeed;
+
+                    //calculate vertical speed:
+                    float diff = transform.position.y - col.transform.position.y;
+                    mVerticalSpeed += diff/2;
+                    if(mVerticalSpeed > 0.025)
+                    {
+                        mVerticalSpeed = 0.025f;
+                    }
+                    else if(mVerticalSpeed < -0.025)
+                    {
+                        mVerticalSpeed = -0.025f;
+                    }
+
                     break;
                 }
             case "Opponent":
-                mHorizontalSpeed = -mHorizontalSpeed;
-                break;
+                {
+                    mHorizontalSpeed = -mHorizontalSpeed;
+
+                    //calculate vertical speed:
+                    float diff = transform.position.y - col.transform.position.y;
+                    mVerticalSpeed += diff / 2;
+                    if (mVerticalSpeed > 0.025)
+                    {
+                        mVerticalSpeed = 0.025f;
+                    }
+                    else if (mVerticalSpeed < -0.025)
+                    {
+                        mVerticalSpeed = -0.025f;
+                    }
+                    break;
+                }
             case "Edge":
                 mVerticalSpeed = -mVerticalSpeed;
                 break;

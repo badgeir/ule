@@ -8,7 +8,7 @@ def main():
     sensors = env.sensors()
     motors = env.motors()
 
-    for game in range(10):
+    for game in range(5):
         done = 0
         total_reward = 0
         while done == 0:
@@ -16,6 +16,7 @@ def main():
                 motor.randomize()
 
             reward, done, info = env.step()
+            # print(sensors[0].value())
             total_reward += reward
         print(total_reward)
         env.reset()

@@ -6,12 +6,9 @@ import os
 import sys
 
 import io
-
 import json
 
-import ule
 from ule.util import jsonparser
-from ule.spaces import Vector
 
 def load(name='none', connectToRunning=True):
     if not connectToRunning:
