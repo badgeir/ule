@@ -42,6 +42,7 @@ public class SceneManager : MonoBehaviour {
         mMotorsUpdated = false;
     }
 
+    //main loop, called each frame
     void Update()
     {
         if (mPendingMessages.Count > 0)
@@ -105,6 +106,8 @@ public class SceneManager : MonoBehaviour {
 
     public void SendFeedback()
     {
+        // Optimization. JSONNode.ToString() used 160 ms when parsing image. By writing out the json string
+        // "by hand", I got it down to 2 ms.
         string jsonstring = "{{\"sensors\": [{0}], \"reward\": \"{1}\", \"done\": \"{2}\", \"info\": {3}}}";
         string sensors = "";
         int idx = 0;
