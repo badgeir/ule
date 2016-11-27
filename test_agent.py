@@ -8,21 +8,19 @@ def main():
     sensors = env.sensors()
     motors = env.motors()
 
-    for i in range(10):
+    for i in range(100):
         for motor in motors:
             motor.randomize()
 
         reward, done, info = env.step()
-        time.sleep(0.5)
 
     env.reset()
 
-    for i in range(10):
+    for i in range(100):
         for motor in motors:
             motor.randomize()
 
         reward, done, info = env.step()
-        time.sleep(0.5)
 
     env.close()
 

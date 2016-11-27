@@ -1,22 +1,13 @@
 
 .cs:
-- need to optimimse json string, tostring() takes 160 ms.
-- write json strings directly instead?
-
 - implement VectorSpace.Contains()
-- Implement VectorMotor.cs
 
 general:
 - ule.load should execute Unity in batchmode in 'load' method
 - ule.load should build executable (to latest changes eventually) if not already built
-
-- SceneManager must implement two run modes: Discrete and RealTime.
-- In Discrete mode, timescale must be 0 between all actions, physics must only be updated on action.
-- In RealTime mode, time and physics should run independent of ule, and ule samples the running Unity game on each action.
 
 - Implement config file for setting up SceneManager.
 - config should also decide tcp ports for IPC between unity and ule.
 - user should be able to decide tcp ports in ule (ule must edit config).
 
 - Linux support
-- Multiagent support. SceneManager holds List of ReinforcementAgents?
