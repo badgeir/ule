@@ -6,6 +6,7 @@ using SimpleJSON;
 public class ColorCamera : Sensor 
 {
     public string mName;
+
     public RenderTexture mRenderTexture;
 
     private int mDimX, mDimY;
