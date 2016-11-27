@@ -54,13 +54,10 @@ class Env(object):
 
         #send action
         jsonmotors = jsonparser.motorsToJson(self._motors)
-        starttime = time.clock()
         self.sock.send(jsonmotors)
 
         #receive other info from environment
         feedback = self.sock.recv(16384)
-        endtime = time.clock()
-        print(endtime - starttime)
         reward, done, info = jsonparser.parseFeedback(feedback, self._sensors)
         return reward, done, info
 
