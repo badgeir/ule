@@ -51,7 +51,12 @@ public class SceneManager : MonoBehaviour {
             if (mMotorsUpdated)
             {
                 Tick();
+
+                var watch = System.Diagnostics.Stopwatch.StartNew();
                 SendFeedback();
+                watch.Stop();
+                var elapsed = watch.ElapsedMilliseconds;
+                UnityEngine.Debug.Log(elapsed);
 
                 mMotorsUpdated = false;
             }
@@ -103,20 +108,20 @@ public class SceneManager : MonoBehaviour {
 
     public void SendFeedback()
     {
-        JSONClass json = new JSONClass();
-
+        string jsonstring = "{{\"sensors\": [{0}], \"reward\": \"{1}\", \"done\": \"{2}\", \"info\": {3}}}";
+        string sensors = "";
         int idx = 0;
         foreach (Sensor sens in mAgent.mSensors)
-        {
-            json["sensors"][idx++] = sens.SampleJson();
+        {   
+            if (idx++ != 0)
+            {
+                sensors += ", ";
+            }
+            sensors += sens.SampleJson();
         }
 
-        json["reward"].AsFloat = mReward;
-        json["done"].AsInt = (int)mGameStatus;
-
-        json["info"] = "";
-
-        mServer.SendJson(json);
+        string output = string.Format(jsonstring, sensors, mReward, (int)mGameStatus, "\"\"");
+        mServer.SendResponse(output);
     }
 
     void Tick()

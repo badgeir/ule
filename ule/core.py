@@ -45,8 +45,8 @@ class Env(object):
         msg = {}
         msg["method"] = "getEnvironmentInfo"
         self.sock.send(json.dumps(msg))
-
         info = self.sock.recv(16384)
+
         self._sensors, self._motors = jsonparser.parseSensorsAndMotors(info)
 
     def step(self):

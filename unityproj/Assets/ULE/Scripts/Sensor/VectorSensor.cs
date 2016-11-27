@@ -35,7 +35,7 @@ public class VectorSensor : Sensor {
         return json;
     }
 
-	public override JSONNode SampleJson()
+	public override string SampleJson()
 	{
         Sample();
 
@@ -45,6 +45,6 @@ public class VectorSensor : Sensor {
 		{
 			json["value"][i].AsFloat = mVector[i];
 		}
-		return json;
+		return json.ToString();
 	}
 }

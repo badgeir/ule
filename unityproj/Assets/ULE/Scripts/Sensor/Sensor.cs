@@ -13,7 +13,7 @@ public class Sensor : MonoBehaviour {
     {
     }
 
-    public virtual JSONNode SampleJson()
+    public virtual string SampleJson()
     {
         return null;
     }

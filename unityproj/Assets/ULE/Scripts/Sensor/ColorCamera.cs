@@ -10,24 +10,10 @@ public class ColorCamera : Sensor
 
     private int mDimX, mDimY;
 
-    string image;
-
     void Start()
     {
         mDimX = mRenderTexture.width;
         mDimY = mRenderTexture.height;
-
-
-        GetComponent<Camera>().Render();
-        RenderTexture.active = mRenderTexture;
-        Texture2D tex = new Texture2D(mDimX, mDimY, TextureFormat.RGB24, false);
-
-        tex.ReadPixels(new Rect(0, 0, mDimX, mDimY), 0, 0);
-        tex.Apply();
-        RenderTexture.active = null;
-
-        byte[] bytes = tex.EncodeToPNG();
-        image = Convert.ToBase64String(bytes);
     }
 
     public override string name()
@@ -46,7 +32,7 @@ public class ColorCamera : Sensor
         return json;
     }
 
-    public override JSONNode SampleJson()
+    public override string SampleJson()
     {
         GetComponent<Camera>().Render();
         RenderTexture.active = mRenderTexture;
@@ -57,11 +43,8 @@ public class ColorCamera : Sensor
         RenderTexture.active = null;
 
         byte[] bytes = tex.EncodeToPNG();
-
-        JSONClass json = new JSONClass();
-        json["name"] = mName;
-        json["value"] = image;
-
+        string image = Convert.ToBase64String(bytes);
+        string json = string.Format("{{\"name\": \"{0}\", \"value\": \"{1}\"}}", mName, image);
         return json;
     }
 }

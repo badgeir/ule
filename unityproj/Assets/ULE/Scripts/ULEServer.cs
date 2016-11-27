@@ -87,13 +87,8 @@ namespace ULE
 
         public void SendJson(JSONClass json)
         {
-            var watch = System.Diagnostics.Stopwatch.StartNew();
 
-            string s = json.Value;
-
-            watch.Stop();
-            var elapsed = watch.ElapsedMilliseconds;
-            UnityEngine.Debug.Log(elapsed);
+            string s = json.ToString();
  
             byte[] bytes = Encoding.UTF8.GetBytes(s);
             mStream.Write(bytes, 0, bytes.Length);
