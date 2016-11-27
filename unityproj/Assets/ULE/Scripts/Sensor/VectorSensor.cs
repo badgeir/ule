@@ -40,9 +40,10 @@ public class VectorSensor : Sensor {
         Sample();
 
 		JSONClass json = new JSONClass();
+        json["name"] = mName;
 		for (int i = 0; i < mLength; i++)
 		{
-			json[mName][i].AsFloat = mVector[i];
+			json["value"][i].AsFloat = mVector[i];
 		}
 		return json;
 	}

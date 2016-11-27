@@ -50,19 +50,19 @@ class Env(object):
         self._sensors, self._motors = jsonparser.parseSensorsAndMotors(info)
 
     def step(self):
-        
+        import time
+
         #send action
         jsonmotors = jsonparser.motorsToJson(self._motors)
+        starttime = time.clock()
         self.sock.send(jsonmotors)
-
-        #receive image from environment
-        #imgbytes = self.imageSock.recv(10000)
 
         #receive other info from environment
         feedback = self.sock.recv(16384)
-
-        img, reward, done, info = jsonparser.parseFeedback(feedback, self._sensors)
-        return img, reward, done, info
+        endtime = time.clock()
+        print(endtime - starttime)
+        reward, done, info = jsonparser.parseFeedback(feedback, self._sensors)
+        return reward, done, info
 
 
     def reset(self):

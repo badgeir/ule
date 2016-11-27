@@ -1,4 +1,4 @@
-#borrowed by openai gym
+#modified version of openai gyms Discrete
 
 import numpy as np
 from ule.spaces import prng

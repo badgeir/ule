@@ -13,9 +13,6 @@ def main():
             motor.randomize()
 
         reward, done, info = env.step()
-
-        for sensor in sensors:
-            print(sensor.value())
    
     env.close()
 

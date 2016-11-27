@@ -44,9 +44,9 @@ class Motor(object):
         return jsn
 
     def __repr__(self):
-        return self._space.__repr__() + ' Motor: %s'%str(self._value)
+        return self._space.__repr__() + ' Motor:\n%s'%str(self._value)
     def __str__(self):
-        return self._space.__repr__() + ' Motor: %s'%str(self._value)
+        return self._space.__repr__() + ' Motor:\n%s'%str(self._value)
 
     def __getitem__(self, idx):
         try:

@@ -46,8 +46,8 @@ public class SceneManager : MonoBehaviour {
     {
         if (mPendingMessages.Count > 0)
         {
-            mParser.ParseInput(mPendingMessages.Dequeue());
 
+            mParser.ParseInput(mPendingMessages.Dequeue());
             if (mMotorsUpdated)
             {
                 Tick();
@@ -55,6 +55,7 @@ public class SceneManager : MonoBehaviour {
 
                 mMotorsUpdated = false;
             }
+
         }
     }
 
@@ -104,9 +105,10 @@ public class SceneManager : MonoBehaviour {
     {
         JSONClass json = new JSONClass();
 
+        int idx = 0;
         foreach (Sensor sens in mAgent.mSensors)
         {
-            json.Add("sensors", sens.SampleJson());
+            json["sensors"][idx++] = sens.SampleJson();
         }
 
         json["reward"].AsFloat = mReward;

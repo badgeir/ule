@@ -1,4 +1,4 @@
-from ule.spaces import Vector
+from ule.spaces import Vector, Image
 import json
 
 class Sensor(object):
@@ -25,6 +25,13 @@ class Sensor(object):
             max = float(jsonlist['max'])
             size = int(jsonlist['size'])
             self._space = Vector(min, max, size)
+        elif jsonlist['type'] == 'camera':
+            min = 0
+            max = 1
+            width = int(jsonlist['width'])
+            heigth = int(jsonlist['heigth'])
+            dim = int(jsonlist['channels'])
+            self._space = Image(min,max,(width,heigth,dim))
         else: 
             raise Exception('Unknown sensor type')
         
@@ -32,19 +39,8 @@ class Sensor(object):
         self._value = self._space.from_jsonable(jsonstr)
 
     def __repr__(self):
-        return self._space.__repr__() + ' Sensor: %s'%str(self._value)
+        return self._name + ": " + self._space.__repr__() + ' Sensor'
     def __str__(self):
-        return self._space.__repr__() + ' Sensor: %s'%str(self._value)
-    
-    def __getitem__(self, idx):
-        try:
-            return self._value[idx]
-        except Exception as e:
-            print self._space.__repr__() + ' Sensor does not support indexing'
-    
-    def __setitem__(self,idx,value):
-        try:
-            self._value[idx] = value
-        except Exception as e:
-            print self._space.__repr__() + ' Sensor does not support indexing'
+        return self._name + ": " + self._space.__repr__() + ' Sensor'
+
         
