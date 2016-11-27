@@ -27,8 +27,24 @@ public class ReinforcementAgent : MonoBehaviour {
 
     bool mMotorsUpdated;
 
+    private static bool mCreated = false;
+    private bool mIsDuplicate;
+
     void Awake()
     {
+        //Check if Agent already exists
+        if(!mCreated)
+        {
+            DontDestroyOnLoad(transform);
+            mCreated = true;
+        }
+        else
+        {
+            mIsDuplicate = true;
+            Destroy(gameObject);
+        }
+
+
         mRunMode = RunMode.Discrete;
 
         if(mRunMode == RunMode.Discrete)
@@ -41,7 +57,7 @@ public class ReinforcementAgent : MonoBehaviour {
 
         mTickableObjects = new List<TickableObject>();
 
-        mUleRPC = new UleRPC(OnGetEnvironment, OnUpdateMotor);
+        mUleRPC = new UleRPC(OnGetEnvironment, OnUpdateMotor, Reset);
 
         mServer = new ULEServer("127.0.0.1", 3000);
         mServer.Connect(OnClientConnected);
@@ -127,7 +143,10 @@ public class ReinforcementAgent : MonoBehaviour {
 
     public void OnDestroy()
     {
-        mServer.Close();
+        if (!mIsDuplicate)
+        {
+            mServer.Close();
+        }
     }
 
     /***************************************************
@@ -183,6 +202,22 @@ public class ReinforcementAgent : MonoBehaviour {
                 m.PushJson(motor);
             }
         }
+    }
+
+    public void Reset()
+    {
+        mGameStatus = GameStatus.StatusOK;
+        mAccumulatedReward = 0;
+
+        mTickableObjects = new List<TickableObject>();
+        mMotorsUpdated = false;
+
+        mSensors.Clear();
+        mMotors.Clear();
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+
+        SendFeedback();
     }
 
 }

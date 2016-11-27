@@ -21,6 +21,8 @@ public class VectorSensor : Sensor {
 	{
 		mVectorSpace = new VectorSpace(mLength, mMinVal, mMaxVal);
 		mVector = mVectorSpace.Zeros();
+
+        GameObject.Find("Agent").GetComponent<ReinforcementAgent>().mSensors.Add(this);
 	}
 
 	public override string name()

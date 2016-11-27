@@ -63,8 +63,9 @@ class Env(object):
 
 
     def reset(self):
-        observation = 0
-        return observation
+        reset = {}
+        reset['method'] = 'reset'
+        self.sock.send(json.dumps(reset))
 
     def close(self):
         self.sock.close()

@@ -21,6 +21,8 @@ public class DepthCamera : Sensor
 
         mDimX = mRenderTexture.width;
         mDimY = mRenderTexture.height;
+
+        GameObject.Find("Agent").GetComponent<ReinforcementAgent>().mSensors.Add(this);
     }
 
     public override string name()

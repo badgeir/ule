@@ -17,6 +17,8 @@ public class ColorCamera : Sensor
         mCamera = GetComponent<Camera>();
         mDimX = mRenderTexture.width;
         mDimY = mRenderTexture.height;
+
+        GameObject.Find("Agent").GetComponent<ReinforcementAgent>().mSensors.Add(this);
     }
 
     public override string name()

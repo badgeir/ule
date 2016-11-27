@@ -11,7 +11,9 @@ public class DiscreteActionMotor : Motor {
 
     protected void Init()
     {
-        mDiscreteSpace = new DiscreteSpace(mNumActions);   
+        mDiscreteSpace = new DiscreteSpace(mNumActions);
+
+        GameObject.Find("Agent").GetComponent<ReinforcementAgent>().mMotors.Add(this);
     }
 
     public override bool PushJson(JSONNode json)

@@ -11,13 +11,14 @@ namespace ULE
     class UleRPC
     {
 
-        Action mOnGetEnvironment;
+        Action mOnGetEnvironment, mReset;
         Action<JSONNode> mMotorUpdater;
 
-        public UleRPC(Action onGetEnvironment, Action<JSONNode> motorUpdater)
+        public UleRPC(Action onGetEnvironment, Action<JSONNode> motorUpdater, Action reset)
         {
             mOnGetEnvironment = onGetEnvironment;
             mMotorUpdater = motorUpdater;
+            mReset = reset;
         }
 
         public void ParseInput(string jsonstring)
@@ -39,9 +40,9 @@ namespace ULE
                         updateEnvironment(parameters);
                         break;
                     }
-                case "restart":
+                case "reset":
                     {
-                        restart();
+                        mReset();
                         break;
                     }
                 default: break;
@@ -54,11 +55,6 @@ namespace ULE
             {
                 mMotorUpdater(json["motors"][motor]);
             }
-        }
-
-        void restart()
-        {
-
         }
 
 

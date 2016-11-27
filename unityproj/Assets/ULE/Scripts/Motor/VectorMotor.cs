@@ -14,6 +14,8 @@ public class VectorMotor : Motor {
     protected void Init()
     {
         mVectorSpace = new VectorSpace(mLength, mMinVal, mMaxVal);
+
+        GameObject.Find("Agent").GetComponent<ReinforcementAgent>().mMotors.Add(this);
     }
 
     public override bool PushJson(JSONNode json)
