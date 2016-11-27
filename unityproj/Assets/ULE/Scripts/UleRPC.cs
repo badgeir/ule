@@ -5,59 +5,63 @@ using System.Text;
 
 using SimpleJSON;
 
-
-class UleRPC
+namespace ULE
 {
 
-    Action mOnGetEnvironment;
-    Action<JSONNode> mMotorUpdater;
-
-    public UleRPC(Action onGetEnvironment, Action<JSONNode> motorUpdater)
+    class UleRPC
     {
-        mOnGetEnvironment = onGetEnvironment;
-        mMotorUpdater = motorUpdater;
-    }
 
-    public void ParseInput(string jsonstring)
-    {
-        JSONNode Json = JSONNode.Parse(jsonstring);
-        string methodname = Json["method"];
+        Action mOnGetEnvironment;
+        Action<JSONNode> mMotorUpdater;
 
-        switch(methodname)
+        public UleRPC(Action onGetEnvironment, Action<JSONNode> motorUpdater)
         {
-            case "getEnvironmentInfo":
-            {
-                mOnGetEnvironment(); 
-                break;
-            } 
-
-            case "updateEnvironment":
-            {
-                JSONNode parameters = Json["parameters"];
-                updateEnvironment(parameters);
-                break;
-            }
-            case "restart":
-            {
-                restart();
-                break;
-            }
-            default: break;
+            mOnGetEnvironment = onGetEnvironment;
+            mMotorUpdater = motorUpdater;
         }
-    }
 
-    void updateEnvironment(JSONNode json)
-    {
-        for (int motor = 0; motor < json["motors"].Count; motor++ )
+        public void ParseInput(string jsonstring)
         {
-            mMotorUpdater(json["motors"][motor]);
+            JSONNode Json = JSONNode.Parse(jsonstring);
+            string methodname = Json["method"];
+
+            switch (methodname)
+            {
+                case "getEnvironmentInfo":
+                    {
+                        mOnGetEnvironment();
+                        break;
+                    }
+
+                case "updateEnvironment":
+                    {
+                        JSONNode parameters = Json["parameters"];
+                        updateEnvironment(parameters);
+                        break;
+                    }
+                case "restart":
+                    {
+                        restart();
+                        break;
+                    }
+                default: break;
+            }
         }
+
+        void updateEnvironment(JSONNode json)
+        {
+            for (int motor = 0; motor < json["motors"].Count; motor++)
+            {
+                mMotorUpdater(json["motors"][motor]);
+            }
+        }
+
+        void restart()
+        {
+
+        }
+
+
     }
-
-    void restart()
-    {
-
-    }
-
 
 }

@@ -2,7 +2,7 @@
 using System.Collections;
 using SimpleJSON;
 
-public class Motor : TickableObject {
+public class Motor : MonoBehaviour {
 
     new public virtual string name()
     {

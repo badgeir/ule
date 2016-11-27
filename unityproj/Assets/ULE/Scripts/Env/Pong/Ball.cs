@@ -14,11 +14,10 @@ public class Ball : TickableObject
         mVerticalSpeed = 0;
         mBallDirection = Vector3.left;
 
-        GameObject.Find("SceneManager").GetComponent<SceneManager>().AddActiveObject(this);
-
+        base.Init();
     }
 
-	// Ticked by SceneManager on each action received
+	// Ticked on physics update, regardsless of discrete or continuous mode
 	public override void Tick()
     {
         transform.Translate((mBallDirection * mHorizontalSpeed + Vector3.up*mVerticalSpeed));
