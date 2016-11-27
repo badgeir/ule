@@ -10,13 +10,15 @@ def main():
 
     for game in range(10):
         done = 0
-        env.reset()
+        total_reward = 0
         while done == 0:
             for motor in motors:
                 motor.randomize()
 
             reward, done, info = env.step()
-            print(reward)
+            total_reward += reward
+        print(total_reward)
+        env.reset()
 
     env.close()
 
