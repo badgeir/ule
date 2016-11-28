@@ -50,7 +50,7 @@ This scene holds two sensors, an Image sensor with the name 'Camera' and a Vecto
 	>>>paddle.value()
 	0
 	>>>paddle.set_value(1)
-	>>>paddle.value(1)
+	>>>paddle.value()
 	1
 
 The motor class also wraps the spaces *contains* method, which checks if the value is valid in the given motor space. The Paddle motors Discrete(3) space has a valid range of the integers 0 - 2.
@@ -116,4 +116,6 @@ The following script plays five consecutive games, and outputs a random motor va
 	    main()
 	
 
-### Setting up a new scene
+## Setting up a new scene
+
+In this section, we will build up a new scene from scratch.
