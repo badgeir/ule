@@ -10,16 +10,31 @@ import json
 
 from ule.util import jsonparser
 
-def load(name='none', connectToRunning=True):
+def load(name='none', connectToRunning=True, tcpport=3000):
     if not connectToRunning:
-        if start(name):
+        if start(name, tcpport):
             print('successfully started environment %s.'%name)
-    
+        else:
+            print('could not start environment %s'%name)
+            return None
     env = Env()
     env.connect()
     return env
 
-def start(name):
+def start(name, tcpport):
+    if find_executable(name):
+        return start_executable(name, tcpport)    
+    elif build_executable(name):
+        return start_executable(name, tcpport)
+    return False
+
+def start_executable(name, port):
+    return False
+
+def find_executable(exe_name):
+    return False
+
+def build_executable(exe_name):
     return False
 
 class Env(object):
