@@ -118,4 +118,131 @@ The following script plays five consecutive games, and outputs a random motor va
 
 ## Setting up a new scene
 
-In this section, we will build up a new scene from scratch.
+In this section, we will build up a new scene from scratch. Basic knowledge of the Unity Game engine is assumed.
+
+We will make a very simple scene where we control a cube with a dicrete motor (stand still, move up and move down), 
+and read back it's current height. We will add a reward every time the height reaches above
+a multiple of 1, and the game ends either when the height reaches a lower threshold -10 (losing condition),
+or a high threshold 10 (victory condition).
+
+In Unity, create a new scene and make sure you have the ULE package imported, either by opening the included unity project, or by importing the ULE_unity package.
+
+Create a new Cube shape. The cube will have a Vector Sensor and a Discrete Motor attached to it. In the Inspector menu, with the Cube selected, add a new C# script, and name it HeightSensor.
+
+In the folder ULE/Sensor/Templates you will find a template script, *VectorSensorTemplate.cs*. Copy the contents of this script to HeightSensor.cs, and rename the class to HeightSensor. HeightSensor.cs should now look like this:
+
+	using UnityEngine;
+	using System.Collections;
+	using ULE;
+
+	public class HeightSensor : VectorSensor
+	{
+	
+		void Start()
+		{
+			mName = "Name";
+			mLength = 3;
+			mMinVal = -100;
+			mMaxVal = 100;
+	
+			//remember to initialize base class
+			base.Init();
+		}
+	
+		protected override void Sample()
+		{
+			mVector[0] = transform.position.x;
+			mVector[1] = transform.position.y;
+			mVector[2] = transform.position.z;
+		}
+	}
+
+We only need one value, to describe the height, so change the length of the vector to 1. Also, change the
+name to "Height". The min and max values are there so that it is simpler to normalize the input during training.
+We can let those stay at the current values. The Start() function should now look like this:
+
+	void Start()
+	{
+		mName = "Height";
+		mLength = 1;
+		mMinVal = -100;
+		mMaxVal = 100;
+
+		//remember to initialize base class
+		base.Init();
+	}
+
+In the Sample function, we will set the value of our vector, so that it contains the height of the cube.
+Change the Sample function to the following:
+
+	protected override void Sample()
+	{
+		mVector[0] = transform.position.y;
+	}
+
+That's it for the Height sensor. Let's move on to the motor.
+
+Add a new Script, 'HeightMotor' to the cube.
+This time, copy the content from ULE/Sensor/Templates/DiscreteMotorTemplate.cs (and remember to change the class name). We need three actions, so mNumActions should be set to 3.
+
+In the Act() method, and integer is given each time we update the motors from python using step().
+Here, we edit the switch statement for out purposes (Do nothing, move up and move down).
+
+The HeighMotor.cs script should look like this when finished:
+
+	using UnityEngine;
+	using System.Collections;
+	using ULE;
+	
+	public class HeightMotor : DiscreteActionMotor
+	{
+	
+		void Start()
+		{
+			mName = "HeightMotor";
+			mNumActions = 3;
+	
+			// remember to init base class
+			base.Init();
+		}
+	
+		// Called when new action is received
+		protected override void Act(int action)
+		{
+			switch (action)
+			{
+				case 0: break; // do nothing
+				case 1: transform.Translate(0, 0.1f, 0); break; // move up
+				case 2: transform.Translate(0, -0.1f, 0); break; // move down
+				default: break;
+			}
+		}
+	}
+
+Our sensors and motors are now done. We now have to add our agent. Add an empty object and name it 'Agent' (The name is important, as the sensors and motors uses the name to automatically attach themselves to the Agents list of sensors and motors. Attach the *ReinforcementAgent* script to Agent. The ReinforcementAgent runs a TCP server, and takes care of the communication between the Unity scene and out python environment. All sensors and motors in the scene are automatically kept track of by the ReinforcementAgent. The hierarchy should now look like the following,
+where 'Cube' has the HeighSensor and HeightMotor scripts attached, and 'Agent' has the ReinforcementAgent attached.
+
+![alt tag](https://raw.githubusercontent.com/badgeir/ule/master/hierarchy.png)
+
+Let's take a look in python to make sure that the sensors and motors show up. Open up a python console,
+and start a ule environment:
+
+	>python
+	>>>import ule
+	>>>env = ule.load()
+	>>>env.sensors()
+	[Height: Vector1 Sensor]
+	>>>env.motors()
+	[HeightMotor: Discrete(3) Motor]
+
+Allright, all good so far. Let's set our motoroutput to 1, and make a single step, to make sure our sensor
+updates with the height measurement:
+
+	>>>env.sensors()[0].value()
+	array([ 0.])
+	>>>env.motors()[0].set_value(1)
+	>>>env.step()
+	>>>env.sensors()[0].value()
+	array([ 0.1])
+
+Good.
