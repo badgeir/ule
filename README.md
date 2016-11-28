@@ -235,7 +235,7 @@ to start the scene. Then open up a python console, and start a ule environment:
 	>>>env.motors()
 	[HeightMotor: Discrete(3) Motor]
 
-Allright, all good so far. Let's set our motoroutput to 1, and make a single step, to make sure our sensor
+Allright, all good so far. Let's set our motor output to 1, and make a single step, to make sure our sensor
 updates with the height measurement:
 
 	>>>env.sensors()[0].value()
