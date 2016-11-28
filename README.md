@@ -1,7 +1,7 @@
 # Unity Learning Environment
 --------------------------------
 
-Unity Learning Environment (ULE) is a lightweight framework for Reinforcement Learning for Unity3D and Python.
+Unity Learning Environment (ULE) is a framework for Reinforcement Learning for Unity3D and Python.
 The software is under development and should in its current state be considered Alpha quality at best.
 
 ![alt tag](https://raw.githubusercontent.com/badgeir/ule/master/pong.png)
