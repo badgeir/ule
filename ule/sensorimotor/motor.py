@@ -21,6 +21,9 @@ class Motor(object):
     def randomize(self):
         self._value = self._space.sample()
 
+    def contains(self, sample):
+        return self._space.contains(sample)
+    
     def space(self):
         return self._space
 
@@ -44,9 +47,9 @@ class Motor(object):
         return jsn
 
     def __repr__(self):
-        return self._space.__repr__() + ' Motor:\n%s'%str(self._value)
+        return self._name + ": " + self._space.__repr__() + ' Motor'
     def __str__(self):
-        return self._space.__repr__() + ' Motor:\n%s'%str(self._value)
+        return self._name + ": " + self._space.__repr__() + ' Motor'
 
     def __getitem__(self, idx):
         try:

@@ -1,8 +1,6 @@
 import numpy as np
 import ule
 
-import time
-
 def main():
     env = ule.load()
     sensors = env.sensors()
@@ -16,9 +14,11 @@ def main():
                 motor.randomize()
 
             reward, done, info = env.step()
-            # print(sensors[0].value())
+            
             total_reward += reward
-        print(total_reward)
+
+        print('game %d, total reward: %f\n'%(game, total_reward))
+        
         env.reset()
 
     env.close()
