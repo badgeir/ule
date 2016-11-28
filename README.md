@@ -224,8 +224,8 @@ where 'Cube' has the HeighSensor and HeightMotor scripts attached, and 'Agent' h
 
 ![alt tag](https://raw.githubusercontent.com/badgeir/ule/master/hierarchy.png)
 
-Let's take a look in python to make sure that the sensors and motors show up. Open up a python console,
-and start a ule environment:
+Let's take a look in python to make sure that the sensors and motors show up. Press play in the Unity editor
+to start the scene. Then open up a python console, and start a ule environment:
 
 	>python
 	>>>import ule
