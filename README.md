@@ -36,8 +36,7 @@ the scene's sensors and motors.
 	>>>motors
 	[Paddle: Discrete(3) Motor]
 
-This scene holds two sensors, an Image sensor with the name 'Camera' and a Vector sensor called 'Ball'.
-For those familiar with openai gym, sensors and motors are in fact abstractions of gym's *spaces*, that define the valid actions and observations for the motors and sensors. The Vector space defines a float vector of length N (where N = 3 for the Ball sensor), and the Image space is really a renamed version of gym's Box. In ULE, the intention is not to work directly on those spaces, but rather through the sensor and motor abstractions. Each sensor and motor holds a name and a value, available through getter and setter methods.
+This scene holds two sensors, an Image sensor with the name 'Camera' and a Vector sensor called 'Ball'. It also holds a motor named 'Paddle'. For those familiar with openai gym, sensors and motors are in fact abstractions of gym's *spaces*, that define the valid actions and observations for the motors and sensors. The Vector space defines a float vector of length N (where N = 3 for the Ball sensor), and the Image space is really a renamed version of gym's Box. In ULE, the intention is not to work directly on those spaces, but rather through the sensor and motor abstractions. Each sensor and motor holds a name and a value, available through getter and setter methods.
 	
 	>>> sensors[0].name()
 	'Ball'
