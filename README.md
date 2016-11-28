@@ -4,7 +4,7 @@
 Unity Learning Environment (ULE) is a framework for Reinforcement Learning for Unity3D and Python.
 The software is under development and should in its current state be considered Alpha quality at best.
 
-![alt tag](https://raw.githubusercontent.com/badgeir/ule/master/pong.png)
+![alt tag](https://raw.githubusercontent.com/badgeir/ule/master/doc/pong.png)
 
 ### Prerequisites
 ULE requires an installation of Unity 5 and a Python distribution with numpy installed in order to run.
@@ -77,7 +77,7 @@ The Image sensor, like the Vector sensor, holds a numpy array. To view the image
 	>>>plt.imshow(camera.value())
 	>>>plt.show()
 
-![alt tag](https://raw.githubusercontent.com/badgeir/ule/master/imshow.png)
+![alt tag](https://raw.githubusercontent.com/badgeir/ule/master/doc/imshow.png)
 
 Finally, to close a connection to the environment:
 
@@ -222,7 +222,7 @@ The HeighMotor.cs script should look like this when finished:
 Our sensors and motors are now done. We now have to add our agent. Add an empty object and name it 'Agent' (The name is important, as the sensors and motors uses the name to automatically attach themselves to the Agents list of sensors and motors. Attach the *ReinforcementAgent* script to Agent. The ReinforcementAgent runs a TCP server, and takes care of the communication between the Unity scene and out python environment. All sensors and motors in the scene are automatically kept track of by the ReinforcementAgent. The hierarchy should now look like the following,
 where 'Cube' has the HeighSensor and HeightMotor scripts attached, and 'Agent' has the ReinforcementAgent attached.
 
-![alt tag](https://raw.githubusercontent.com/badgeir/ule/master/hierarchy.png)
+![alt tag](https://raw.githubusercontent.com/badgeir/ule/master/doc/hierarchy.png)
 
 Let's take a look in python to make sure that the sensors and motors show up. Press play in the Unity editor
 to start the scene. Then open up a python console, and start a ule environment:
