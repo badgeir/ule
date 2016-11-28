@@ -2,57 +2,60 @@
 using System.Collections;
 using SimpleJSON;
 
-public class DiscreteActionMotor : Motor {
+namespace ULE
+{
+    public class DiscreteActionMotor : Motor {
 
-    public string mName;
-    protected int mNumActions;
+        public string mName;
+        protected int mNumActions;
 
-    private DiscreteSpace mDiscreteSpace;
+        private DiscreteSpace mDiscreteSpace;
 
-    protected void Init()
-    {
-        mDiscreteSpace = new DiscreteSpace(mNumActions);
-
-        GameObject.Find("Agent").GetComponent<ReinforcementAgent>().mMotors.Add(this);
-    }
-
-    public override bool PushJson(JSONNode json)
-    {
-        bool status = true;
-
-        JSONNode value = json["value"];
-
-        if(value != null)
+        protected void Init()
         {
-            try
+            mDiscreteSpace = new DiscreteSpace(mNumActions);
+
+            GameObject.Find("Agent").GetComponent<ReinforcementAgent>().AddMotor(this);
+        }
+
+        public override bool PushJson(JSONNode json)
+        {
+            bool status = true;
+
+            JSONNode value = json["value"];
+
+            if(value != null)
             {
-                int action = value.AsInt;
-                if(mDiscreteSpace.Contains(action))
+                try
                 {
-                    Act(action);
+                    int action = value.AsInt;
+                    if(mDiscreteSpace.Contains(action))
+                    {
+                        Act(action);
+                    }
+                }
+                catch
+                {
+                    status = false;
                 }
             }
-            catch
+            else
             {
                 status = false;
             }
+            return status;
         }
-        else
+
+        public override string name()
         {
-            status = false;
+            return mName;
         }
-        return status;
-    }
 
-    public override string name()
-    {
-        return mName;
-    }
-
-    public override JSONNode JsonDescription()
-    {
-        JSONNode json = mDiscreteSpace.ToJSON();
-        json["name"] = mName;
-        return json;
+        public override JSONNode JsonDescription()
+        {
+            JSONNode json = mDiscreteSpace.ToJSON();
+            json["name"] = mName;
+            return json;
+        }
     }
 }

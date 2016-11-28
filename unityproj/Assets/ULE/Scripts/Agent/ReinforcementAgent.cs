@@ -10,23 +10,23 @@ public class ReinforcementAgent : MonoBehaviour {
     enum RunMode { Discrete, Continuous }
     RunMode mRunMode;
 
-    public List<Sensor> mSensors;
-    public List<Motor> mMotors;
+    List<Sensor> mSensors;
+    List<Motor> mMotors;
 
     enum GameStatus { StatusOK, GameOver };
     GameStatus mGameStatus;
 
-    private float mAccumulatedReward;
+    float mAccumulatedReward;
 
-    private Queue<string> mPendingMessages;
+    Queue<string> mPendingMessages;
 
     ULEServer mServer;
     UleRPC mUleRPC;
 
     bool mMotorsUpdated;
 
-    private static bool mCreated = false;
-    private bool mIsDuplicate;
+    static bool mCreated = false;
+    bool mIsDuplicate;
 
     void Awake()
     {
@@ -52,6 +52,9 @@ public class ReinforcementAgent : MonoBehaviour {
 
         mGameStatus = GameStatus.StatusOK;
         mAccumulatedReward = 0;
+
+        mSensors = new List<Sensor>();
+        mMotors = new List<Motor>();
 
         mUleRPC = new UleRPC(OnGetEnvironment, OnUpdateMotor, Reset);
 
@@ -138,6 +141,16 @@ public class ReinforcementAgent : MonoBehaviour {
         {
             mServer.Close();
         }
+    }
+
+    public void AddSensor(Sensor sensor)
+    {
+        mSensors.Add(sensor);
+    }
+
+    public void AddMotor(Motor motor)
+    {
+        mMotors.Add(motor);
     }
 
     /***************************************************

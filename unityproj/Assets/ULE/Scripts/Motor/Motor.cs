@@ -2,31 +2,34 @@
 using System.Collections;
 using SimpleJSON;
 
-public class Motor : MonoBehaviour {
+namespace ULE
+{
+    public class Motor : MonoBehaviour {
 
-    new public virtual string name()
-    {
-        return "";
-    }
+        new public virtual string name()
+        {
+            return "";
+        }
 
-    public virtual bool PushJson(JSONNode json)
-    {
-        return false;
-    }
+        public virtual bool PushJson(JSONNode json)
+        {
+            return false;
+        }
 
-    public virtual JSONNode JsonDescription()
-    {
-        return null;
-    }
+        public virtual JSONNode JsonDescription()
+        {
+            return null;
+        }
 
-    protected virtual void Act(int action)
-    {
+        protected virtual void Act(int action)
+        {
 
-    }
+        }
     
-    protected virtual void Act(float[] action)
-    {
+        protected virtual void Act(float[] action)
+        {
+
+        }
 
     }
-
 }

@@ -5,9 +5,13 @@ using System.Xml.Serialization;
 using System;
 using SimpleJSON;
 
+using ULE;
+
 public class DepthCamera : Sensor 
 {
     public string mName;
+
+    private Camera mCamera; 
 
     public RenderTexture mRenderTexture;
 	public Material mDepthMaterial;
@@ -15,14 +19,14 @@ public class DepthCamera : Sensor
     private int mDimX, mDimY;
 
 	void Start () {
-		Camera cam = GetComponent<Camera> ();
-        cam.depthTextureMode = DepthTextureMode.Depth;
-        cam.depth = 24;
+        mCamera = GetComponent<Camera>();
+        mCamera.depthTextureMode = DepthTextureMode.Depth;
+        mCamera.depth = 24;
 
         mDimX = mRenderTexture.width;
         mDimY = mRenderTexture.height;
 
-        GameObject.Find("Agent").GetComponent<ReinforcementAgent>().mSensors.Add(this);
+        GameObject.Find("Agent").GetComponent<ReinforcementAgent>().AddSensor(this);
     }
 
     public override string name()
@@ -48,13 +52,15 @@ public class DepthCamera : Sensor
 
     public override string SampleJson()
     {
-        GetComponent<Camera>().Render();
+        mCamera.targetTexture = mRenderTexture;
+        mCamera.Render();
         RenderTexture.active = mRenderTexture;
         Texture2D tex = new Texture2D(mDimX, mDimY, TextureFormat.RGB24, false);
 
         tex.ReadPixels(new Rect(0, 0, mDimX, mDimY), 0, 0);
         tex.Apply();
         RenderTexture.active = null;
+        mCamera.targetTexture = null;
 
         byte[] bytes = tex.EncodeToPNG();
         string image = Convert.ToBase64String(bytes);

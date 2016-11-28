@@ -2,24 +2,27 @@
 using System.Collections;
 using SimpleJSON;
 
-public class Sensor : MonoBehaviour {
+namespace ULE
+{
+    public class Sensor : MonoBehaviour {
 
-    new public virtual string name()
-    {
-        return "";
-    }
+        new public virtual string name()
+        {
+            return "";
+        }
 
-    protected virtual void Sample()
-    {
-    }
+        protected virtual void Sample()
+        {
+        }
 
-    public virtual string SampleJson()
-    {
-        return null;
-    }
+        public virtual string SampleJson()
+        {
+            return null;
+        }
 
-    public virtual JSONNode JsonDescription()
-    {
-        return null;
+        public virtual JSONNode JsonDescription()
+        {
+            return null;
+        }
     }
 }

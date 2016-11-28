@@ -3,6 +3,8 @@ using System.Collections;
 using System;
 using SimpleJSON;
 
+using ULE;
+
 public class ColorCamera : Sensor 
 {
     public string mName;
@@ -18,7 +20,7 @@ public class ColorCamera : Sensor
         mDimX = mRenderTexture.width;
         mDimY = mRenderTexture.height;
 
-        GameObject.Find("Agent").GetComponent<ReinforcementAgent>().mSensors.Add(this);
+        GameObject.Find("Agent").GetComponent<ReinforcementAgent>().AddSensor(this);
     }
 
     public override string name()
@@ -40,7 +42,7 @@ public class ColorCamera : Sensor
     public override string SampleJson()
     {
         mCamera.targetTexture = mRenderTexture;
-        GetComponent<Camera>().Render();
+        mCamera.Render();
         RenderTexture.active = mRenderTexture;
         Texture2D tex = new Texture2D(mDimX, mDimY, TextureFormat.RGB24, false);
 
