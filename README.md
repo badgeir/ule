@@ -62,8 +62,8 @@ In order to send motor output and receive sensor feedback from the Unity scene,
 *env.step()* is used, much like in openai gym. In contrast to gym, the step() function takes no input, but rather
 sends the member motor values when sending to Unity.
 
-	>>>reware, done, info = env.step()
-	>>> ball.value()
+	>>>reward, done, info = env.step()
+	>>>ball.value()
 	array([ 0.02,  0.02,  0.  ])
 
 Here, the motor value of '1' was sent to the Paddle motor in the Unity scene, and the Ball sensor has been updated one timestep with the new Ball sensor value.
