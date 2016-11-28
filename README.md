@@ -44,7 +44,7 @@ This scene holds two sensors, an Image sensor with the name 'Camera' and a Vecto
 	'Ball'
 	>>>ball = sensors[0]
 	>>>ball.value()
-	array([ 0.01,  0.01,  0.  ])
+	array([ 0.,  0.,  0.  ])
 	>>>
 	>>>paddle = motors[0]
 	>>>paddle.value()
@@ -66,7 +66,7 @@ sends the member motor values when sending to Unity.
 
 	>>>reward, done, info = env.step()
 	>>>ball.value()
-	array([ 0.02,  0.02,  0.  ])
+	array([ 0.01,  0.01,  0.  ])
 
 Here, the motor value of '1' was sent to the Paddle motor in the Unity scene, and the Ball sensor has been updated one timestep with the new Ball sensor value.
 
