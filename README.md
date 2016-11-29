@@ -118,10 +118,11 @@ The following script plays five consecutive games, and outputs a random motor va
 
 ## Setting up a new scene
 
-In this section, we will build up a new scene from scratch. Basic knowledge of the Unity Game engine is assumed.
+In this section, we will build up a new scene from scratch. Basic knowledge of the Unity game engine is assumed.
 
-We will make a very simple scene where we control a cube with a dicrete motor (stand still, move up and move down), 
-and read back it's current height. We will add a reward every time the height reaches above
+We will make a very simple scene where we control a cube with a discrete motor which controls three available actions: 
+stand still, move up and move down. 
+A vector sensor will read back it's current height. We will add a reward every time the height reaches above
 a multiple of 1, and the game ends either when the height reaches a lower threshold -10 (losing condition),
 or a high threshold 10 (victory condition).
 
@@ -157,7 +158,7 @@ In the folder ULE/Sensor/Templates you will find a template script, *VectorSenso
 		}
 	}
 
-We only need one value, to describe the height, so change the length of the vector to 1. Also, change the
+We only need one value to describe the height, so change the length of the vector to 1. Also, change the
 name to "Height". The min and max values are there so that it is simpler to normalize the input during training.
 We can let those stay at the current values. The Start() function should now look like this:
 
@@ -185,7 +186,7 @@ That's it for the Height sensor. Let's move on to the motor.
 Add a new Script, 'HeightMotor' to the cube.
 This time, copy the content from ULE/Sensor/Templates/DiscreteMotorTemplate.cs (and remember to change the class name). We need three actions, so mNumActions should be set to 3.
 
-In the Act() method, and integer is given each time we update the motors from python using step().
+In the Act() method, an integer is given each time we update the motors from python using step().
 Here, we edit the switch statement for out purposes (Do nothing, move up and move down).
 
 The HeighMotor.cs script should look like this when finished:
@@ -219,7 +220,8 @@ The HeighMotor.cs script should look like this when finished:
 		}
 	}
 
-Our sensors and motors are now done. We now have to add our agent. Add an empty object and name it 'Agent' (The name is important, as the sensors and motors uses the name to automatically attach themselves to the Agents list of sensors and motors. Attach the *ReinforcementAgent* script to Agent. The ReinforcementAgent runs a TCP server, and takes care of the communication between the Unity scene and out python environment. All sensors and motors in the scene are automatically kept track of by the ReinforcementAgent. The hierarchy should now look like the following,
+Our sensors and motors are now done. We now have to add another script for taking care of the
+communication with python. Add an empty object and name it 'Agent' (The name is important, as the sensors and motors uses the name to automatically attach themselves to the Agents list of sensors and motors. Attach the *ReinforcementAgent* script to Agent. The ReinforcementAgent runs a TCP server, and takes care of the communication between the Unity scene and out python environment. All sensors and motors in the scene are automatically kept track of by the ReinforcementAgent. The hierarchy should now look like the following,
 where 'Cube' has the HeighSensor and HeightMotor scripts attached, and 'Agent' has the ReinforcementAgent attached.
 
 ![alt tag](https://raw.githubusercontent.com/badgeir/ule/master/doc/hierarchy.png)
