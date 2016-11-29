@@ -6,3 +6,4 @@ unityproj/obj
 *.csproj
 *.suo
 env.bat
+Deploy
