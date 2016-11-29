@@ -173,7 +173,8 @@ We can let those stay at the current values. The Start() function should now loo
 		base.Init();
 	}
 
-In the Sample function, we will set the value of our vector, so that it contains the height of the cube.
+The Sample function is called each time we make a step() from python. In here, we set the sensor values which will be sent back to the python sensor.
+We will set the value of the first (and only) vector element so that it contains the height of the cube.
 Change the Sample function to the following:
 
 	protected override void Sample()

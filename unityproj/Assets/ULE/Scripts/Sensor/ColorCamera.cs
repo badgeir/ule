@@ -17,6 +17,8 @@ public class ColorCamera : Sensor
     void Start()
     {
         mCamera = GetComponent<Camera>();
+        mCamera.enabled = true;
+
         mDimX = mRenderTexture.width;
         mDimY = mRenderTexture.height;
 
@@ -42,8 +44,8 @@ public class ColorCamera : Sensor
     public override string SampleJson()
     {
         mCamera.targetTexture = mRenderTexture;
-        mCamera.Render();
         RenderTexture.active = mRenderTexture;
+        mCamera.Render();
         Texture2D tex = new Texture2D(mDimX, mDimY, TextureFormat.RGB24, false);
 
         tex.ReadPixels(new Rect(0, 0, mDimX, mDimY), 0, 0);
