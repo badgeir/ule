@@ -30,6 +30,8 @@ public class ReinforcementAgent : MonoBehaviour {
 
     void Awake()
     {
+        Application.targetFrameRate = 120;
+        
         //Check if Agent already exists
         if(!mCreated)
         {
