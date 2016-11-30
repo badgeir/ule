@@ -7,7 +7,7 @@ The software is under development and should in its current state be considered 
 ![alt tag](https://raw.githubusercontent.com/badgeir/ule/master/doc/pong.png)
 
 ### Prerequisites
-ULE requires an installation of Unity 5 and a Python distribution with numpy installed in order to run.
+ULE requires an installation of Unity 5 and a scientific Python distribution with numpy and matplotlib installed in order to run.
 
 ### Setting up ULE
 

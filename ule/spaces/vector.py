@@ -19,17 +19,18 @@ class Vector(Space):
             Box(np.array([-1.0,-2.0]), np.array([2.0,4.0])) # low and high are arrays of the same shape
         """
         assert np.isscalar(low) and np.isscalar(high) and np.isscalar(size)
-        self.low = low + np.zeros(size)
-        self.high = high + np.zeros(size)
+        self.__low = low + np.zeros(size)
+        self.__high = high + np.zeros(size)
+        self.__size = size
     
     def zeros(self):
-        return np.zeros(self.size)
+        return np.zeros(self.__size)
 
     def sample(self):
-        return prng.np_random.uniform(low=self.low, high=self.high, size=self.low.size)
+        return prng.np_random.uniform(low=self.__low, high=self.__high, size=self.__size)
     
     def contains(self, x):
-        return x.size == self.size and (x >= self.low).all() and (x <= self.high).all()
+        return x.size == self.__size and (x >= self.__low).all() and (x <= self.__high).all()
 
     def to_jsonable(self, sample_n):
         return np.array(sample_n).tolist()
@@ -38,9 +39,9 @@ class Vector(Space):
 
     @property
     def size(self):
-        return self.low.size
+        return self.__size
     def __repr__(self):
-        return "Vector" + str(self.size)
+        return "Vector" + str(self.__size)
     def __eq__(self, other):
-        return np.allclose(self.low, other.low) and np.allclose(self.high, other.high)
+        return np.allclose(self.__low, other.__low) and np.allclose(self.__high, other.__high)
         
