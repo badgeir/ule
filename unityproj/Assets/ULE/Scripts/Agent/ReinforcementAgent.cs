@@ -20,6 +20,7 @@ public class ReinforcementAgent : MonoBehaviour {
 
     Queue<string> mPendingMessages;
 
+    int mPort;
     ULEServer mServer;
     UleRPC mUleRPC;
 
@@ -30,8 +31,26 @@ public class ReinforcementAgent : MonoBehaviour {
 
     void Awake()
     {
+        mPort = 3000;
+        string[] args =  System.Environment.GetCommandLineArgs();
+        foreach(string arg in args)
+        {
+            if(arg.Contains("port"))
+            {
+                try
+                {
+                    string[] strs = arg.Split('=');
+                    mPort = int.Parse(strs[1]);
+                    Debug.Log("port = " + mPort);
+                }
+                catch(System.Exception e)
+                {
+                    Debug.LogError("Exception: Failed to parse port, using default value of 3000.");
+                }
+            }
+        }
+
         Application.targetFrameRate = 120;
-        
         //Check if Agent already exists
         if(!mCreated)
         {
@@ -60,7 +79,7 @@ public class ReinforcementAgent : MonoBehaviour {
 
         mUleRPC = new UleRPC(OnGetEnvironment, OnUpdateMotor, Reset);
 
-        mServer = new ULEServer("127.0.0.1", 3000);
+        mServer = new ULEServer("127.0.0.1", mPort);
         mServer.Connect(OnClientConnected);
 
         mPendingMessages = new Queue<string>();
