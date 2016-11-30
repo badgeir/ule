@@ -15,7 +15,7 @@ Clone or download the repository.
 
 Open a command prompt in the repository root, and run
 
-	python setup.py installed
+	python setup.py install
 
 ## Usage
 ----------------
