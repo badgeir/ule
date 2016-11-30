@@ -11,7 +11,11 @@ ULE requires an installation of Unity 5 and a Python distribution with numpy ins
 
 ### Setting up ULE
 
-Pending.
+Clone or download the repository.
+
+Open a command prompt in the repository root, and run
+
+	python setup.py installed
 
 ## Usage
 ----------------
