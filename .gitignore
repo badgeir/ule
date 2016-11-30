@@ -7,3 +7,6 @@ unityproj/obj
 *.suo
 env.bat
 Deploy
+build
+dist
+ule.egg-info
