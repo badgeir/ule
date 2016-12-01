@@ -57,7 +57,7 @@ This scene holds two sensors, an Image sensor with the name 'Camera' and a Vecto
 
 The motor class also wraps the spaces *contains* method, which checks if the value is valid in the given motor space. The Paddle motors Discrete(3) space has a valid range of the integers 0 - 2.
 
-	>>>paddle.contains(1)
+	>>>paddle.contains(2)
 	True
 	>>>paddle.contains(3)
 	False
