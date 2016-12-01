@@ -50,14 +50,3 @@ class Motor(object):
     def __str__(self):
         return self._name + ": " + str(self._space) + ' Motor'
 
-    def __getitem__(self, idx):
-        try:
-            return self._value[idx]
-        except Exception as e:
-            print str(self._space) + ' Motor does not support indexing'
-    
-    def __setitem__(self, idx, value):
-        try:
-            self._value[idx] = value
-        except Exception as e:
-            print str(self._space) + ' Motor does not support indexing'
