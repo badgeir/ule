@@ -125,7 +125,8 @@ A vector sensor will read back it's current height. We will add a reward every t
 a multiple of 1, and the game ends either when the height reaches a lower threshold -10 (losing condition),
 or a high threshold 10 (victory condition).
 
-In Unity, create a new scene and make sure you have the ULE package imported, either by opening the included unity project, or by importing the ULE_unity package.
+In Unity, create a new scene and make sure you have the unityproj/Assets/ULE directory imported in your projected, either by opening the example project (unityproj),
+or by copying it into the Assets folder in your project.
 
 Create a new Cube shape. The cube will have a Vector Sensor and a Discrete Motor attached to it. In the Inspector menu, with the Cube selected, add a new C# script, and name it HeightSensor.
 
