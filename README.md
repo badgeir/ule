@@ -1,7 +1,8 @@
 # Unity Learning Environment
 --------------------------------
 
-Unity Learning Environment (ULE) is a framework for Reinforcement Learning for Unity3D and Python.
+Unity Learning Environment (ULE) is a framework for Reinforcement Learning for Unity3D and Python,
+inspired by [openai gym](https://github.com/openai/gym/) and [Arcade Learning Environment](https://github.com/mgbellemare/Arcade-Learning-Environment).
 The software is under development and should in its current state be considered Alpha quality at best.
 
 ![alt tag](https://raw.githubusercontent.com/badgeir/ule/master/doc/pong.png)
@@ -39,7 +40,10 @@ Unity scene are available through the ule environment's lists of sensors and mot
 	>>>env.motors
 	[Paddle: Discrete(3) Motor]
 
-This scene holds two sensors, an Image sensor with the name 'Camera' and a Vector sensor called 'Ball'. It also holds a motor named 'Paddle'. For those familiar with openai gym, sensors and motors are in fact abstractions of gym's *spaces*, that define the valid actions and observations for the motors and sensors. The Vector space defines a float vector of length N (where N = 3 for the Ball sensor), and the Image space is really a renamed version of gym's Box. In ULE, the intention is not to work directly on those spaces, but rather through the sensor and motor abstractions. Each sensor and motor holds a name and a value, available through getter and setter methods.
+This scene holds two sensors, an Image sensor with the name 'Camera' and a Vector sensor called 'Ball'. It also holds a motor named 'Paddle'. 
+For those familiar with openai gym, sensors and motors are in fact abstractions of gym's *spaces*, that define the valid actions and observations 
+for the motors and sensors. The Vector space defines a float vector of length N (where N = 3 for the Ball sensor), and the Image space is really a 
+renamed version of gym's Box. In ULE, the intention is not to work directly on those spaces, but rather through the sensor and motor abstractions. Each sensor and motor holds a name and a value, available through getter and setter methods.
 	
 	>>> env.sensors[0].name()
 	'Ball'

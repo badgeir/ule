@@ -1,4 +1,4 @@
-# borrowed by openai gym
+# Copyright (c) 2016 OpenAI (http://openai.com)
 
 import numpy
 

@@ -1,3 +1,5 @@
+# Copyright (c) 2016 OpenAI (http://openai.com)
+
 # Space-related abstractions
 class Space(object):
     """Defines the observation and action spaces, so you can write generic

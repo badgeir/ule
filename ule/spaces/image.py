@@ -1,4 +1,5 @@
-#modified version of openai gyms Box
+# modified version of openai gyms Box (MIT License)
+# Copyright (c) 2016 OpenAI (http://openai.com)
 
 import numpy as np
 from ule.spaces import prng
