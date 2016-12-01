@@ -10,3 +10,5 @@ Deploy
 build
 dist
 ule.egg-info
+*.xml
+*.iml

@@ -1,18 +1,12 @@
-import sys
-import numpy as np
-
 import socket
-import os
-import sys
-
-import io
 import json
 
 from ule.util import jsonparser
 
-def load(name='none', connectToRunning=True, port=3000):
-    if not connectToRunning:
-        if start(name, tcpport):
+
+def load(name='none', connect_to_running=True, port=3000):
+    if not connect_to_running:
+        if start(name, port):
             print('successfully started environment %s.'%name)
         else:
             print('could not start environment %s'%name)
@@ -21,6 +15,7 @@ def load(name='none', connectToRunning=True, port=3000):
     env.connect()
     return env
 
+
 def start(name, tcpport):
     if find_executable(name):
         return start_executable(name, tcpport)    
@@ -28,68 +23,66 @@ def start(name, tcpport):
         return start_executable(name, tcpport)
     return False
 
+
 def start_executable(name, port):
     return False
+
 
 def find_executable(exe_name):
     return False
 
+
 def build_executable(exe_name):
     return False
 
-class Env(object):
-    def __init__(self, hostIP="127.0.0.1", port=3000):
-        self.__closed = False
-        
-        self.__motors = None
-        self.__sensors = None
 
-        self.__hostIP = "127.0.0.1"
-        self.__port = port
+class Env(object):
+    def __init__(self, host_ip="127.0.0.1", port=3000):
+        self._closed = False
+        
+        self.motors = None
+        self.sensors = None
+
+        self._hostIP = host_ip
+        self._port = port
+
+        self.__sock = None
     
     def connect(self):
         self.__sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.__sock.connect((self.__hostIP, self.__port))
+        self.__sock.connect((self._hostIP, self._port))
 
         # get environment info
-        msg = {}
-        msg["method"] = "getEnvironmentInfo"
+        msg = {"method": "getEnvironmentInfo"}
         self.__sock.send(json.dumps(msg))
         info = self.__sock.recv(16384)
 
-        self.__sensors, self.__motors = jsonparser.parseSensorsAndMotors(info)
+        self.sensors, self.motors = jsonparser.parseSensorsAndMotors(info)
 
     def step(self):
-        #send action
-        jsonmotors = jsonparser.motorsToJson(self.__motors)
+        # send action
+        jsonmotors = jsonparser.motorsToJson(self.motors)
         self.__sock.send(jsonmotors)
 
-        #receive sensor, reward and other info from unity environment
+        # receive sensor, reward and other info from unity environment
         feedback = self.__sock.recv(16384)
-        reward, done, info = jsonparser.parseFeedback(feedback, self.__sensors)
+        reward, done, info = jsonparser.parseFeedback(feedback, self.sensors)
         return reward, done, info
 
-
     def reset(self):
-        reset = {}
-        reset['method'] = 'reset'
+        reset = {'method': 'reset'}
         self.__sock.send(json.dumps(reset))
         feedback = self.__sock.recv(16384)
-        jsonparser.parseFeedback(feedback, self.__sensors)
-
+        jsonparser.parseFeedback(feedback, self.sensors)
 
     def close(self):
         self.__sock.close()
-        self.__closed = True
+        self._closed = True
 
     def seed(self, seed=None):
-        return 0
-
-    def sensors(self):
-        return self.__sensors
-    
-    def motors(self):
-        return self.__motors
+        import ule.spaces
+        if seed:
+            ule.spaces.seed(seed)
 
     def __del__(self):
         self.close()

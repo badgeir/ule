@@ -32,25 +32,23 @@ To connect to the running scene in Unity, write
 
 This will connect to the server running in Unity, and get the environment information for the running scene.
 The main components of the ule interface are *sensors* and *motors*. Every available sensor and motor in the
-Unity scene are available through the environments sensors() and motors() getters, which return Lists containing
+Unity scene are available through the environments public variables sensors and motors, which return lists containing
 the scene's sensors and motors.
 
-	>>>sensors = env.sensors()
-	>>>motors = env.motors()
-	>>>sensors
+	>>>env.sensors
 	[Ball: Vector3 Sensor, Camera: Image(84L, 84L, 3L) Sensor]
-	>>>motors
+	>>>env.motors
 	[Paddle: Discrete(3) Motor]
 
 This scene holds two sensors, an Image sensor with the name 'Camera' and a Vector sensor called 'Ball'. It also holds a motor named 'Paddle'. For those familiar with openai gym, sensors and motors are in fact abstractions of gym's *spaces*, that define the valid actions and observations for the motors and sensors. The Vector space defines a float vector of length N (where N = 3 for the Ball sensor), and the Image space is really a renamed version of gym's Box. In ULE, the intention is not to work directly on those spaces, but rather through the sensor and motor abstractions. Each sensor and motor holds a name and a value, available through getter and setter methods.
 	
-	>>> sensors[0].name()
+	>>> env.sensors[0].name()
 	'Ball'
-	>>>ball = sensors[0]
+	>>>ball = env.sensors[0]
 	>>>ball.value()
 	array([ 0.,  0.,  0.  ])
 	>>>
-	>>>paddle = motors[0]
+	>>>paddle = env.motors[0]
 	>>>paddle.value()
 	0
 	>>>paddle.set_value(1)
@@ -76,7 +74,7 @@ Here, the motor value of '1' was sent to the Paddle motor in the Unity scene, an
 
 The Image sensor, like the Vector sensor, holds a numpy array. To view the image from the Camera sensor, one can use pyplot:
 	
-	>>>camera = sensors[1]
+	>>>camera = env.sensors[1]
 	>>>from matplotlib import pyplot as plt
 	>>>plt.imshow(camera.value())
 	>>>plt.show()
@@ -96,14 +94,12 @@ The following script plays five consecutive games, and outputs a random motor va
 	
 	def main():
 	    env = ule.load()
-	    sensors = env.sensors()
-	    motors = env.motors()
-	
+
 	    for game in range(5):
 	        done = 0
 	        total_reward = 0
 	        while done == 0:
-	            for motor in motors:
+	            for motor in env.motors:
 	                motor.randomize()
 	
 	            reward, done, info = env.step()
@@ -237,19 +233,19 @@ to start the scene. Then open up a python console, and start a ule environment:
 	>python
 	>>>import ule
 	>>>env = ule.load()
-	>>>env.sensors()
+	>>>env.sensors
 	[Height: Vector1 Sensor]
-	>>>env.motors()
+	>>>env.motors
 	[HeightMotor: Discrete(3) Motor]
 
 Allright, all good so far. Let's set our motor output to 1, and make a single step, to make sure our sensor
 updates with the height measurement:
 
-	>>>env.sensors()[0].value()
+	>>>env.sensors[0].value()
 	array([ 0.])
-	>>>env.motors()[0].set_value(1)
+	>>>env.motors[0].set_value(1)
 	>>>env.step()
-	>>>env.sensors()[0].value()
+	>>>env.sensors[0].value()
 	array([ 0.1])
 
 Good.
