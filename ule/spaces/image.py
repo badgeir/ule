@@ -22,22 +22,25 @@ class Image(Space):
         """
         if shape is None:
             assert low.shape == high.shape
-            self.low = low
-            self.high = high
+            self.__low = low
+            self.__high = high
         else:
             assert np.isscalar(low) and np.isscalar(high)
-            self.low = low + np.zeros(shape)
-            self.high = high + np.zeros(shape)
+            self.__low = low + np.zeros(shape)
+            self.__high = high + np.zeros(shape)
     
     def zeros(self):
         return np.zeros(self.shape)
+
     def sample(self):
-        return prng.np_random.uniform(low=self.low, high=self.high, size=self.low.shape)
+        return prng.np_random.uniform(low=self.__low, high=self.__high, size=self.__low.shape)
+
     def contains(self, x):
-        return x.shape == self.shape and (x >= self.low).all() and (x <= self.high).all()
+        return x.shape == self.shape and (x >= self.__low).all() and (x <= self.__high).all()
 
     def to_jsonable(self, sample_n):
         return np.array(sample_n).tolist()
+
     def from_jsonable(self, sample_n):
         imgbytes = sample_n.decode('base64')
         img = None
@@ -49,8 +52,10 @@ class Image(Space):
 
     @property
     def shape(self):
-        return self.low.shape
+        return self.__low.shape
+
     def __repr__(self):
         return "Image" + str(self.shape)
+
     def __eq__(self, other):
-        return np.allclose(self.low, other.low) and np.allclose(self.high, other.high)
+        return np.allclose(self.__low, other.low) and np.allclose(self.__high, other.high)

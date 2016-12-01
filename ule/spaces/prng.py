@@ -1,8 +1,9 @@
-#borrowed by openai gym
+# borrowed by openai gym
 
 import numpy
 
 np_random = numpy.random.RandomState()
+
 
 def seed(seed=None):
     """Seed the common numpy.random.RandomState used in spaces

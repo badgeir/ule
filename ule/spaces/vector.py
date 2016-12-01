@@ -1,9 +1,10 @@
-#borrowed by openai
+# modified version of openai gym's Box
 
 import numpy as np
 
 from ule.spaces import prng
 from ule.spaces.space import Space
+
 
 class Vector(Space):
     """
@@ -34,14 +35,16 @@ class Vector(Space):
 
     def to_jsonable(self, sample_n):
         return np.array(sample_n).tolist()
+
     def from_jsonable(self, sample_n):
         return np.array(sample_n).astype('float')
 
     @property
     def size(self):
         return self.__size
+
     def __repr__(self):
         return "Vector" + str(self.__size)
+
     def __eq__(self, other):
         return np.allclose(self.__low, other.__low) and np.allclose(self.__high, other.__high)
-        

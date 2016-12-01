@@ -1,8 +1,9 @@
-#modified version of openai gyms Discrete
+# modified version of openai gyms Discrete
 
 import numpy as np
 from ule.spaces import prng
 from ule.spaces.space import Space
+
 
 class Discrete(Space):
     """
@@ -15,6 +16,7 @@ class Discrete(Space):
 
     def zeros(self):
         return 0
+
     def sample(self):
         return prng.np_random.randint(self.n)
 
@@ -25,14 +27,16 @@ class Discrete(Space):
             as_int = int(x)
         else:
             return False
-        return as_int >= 0 and as_int < self.n
-    
+        return 0 <= as_int < self.n
+
     def to_jsonable(self, sample_n):
         return sample_n
+
     def from_jsonable(self, sample_n):
         pass
 
     def __repr__(self):
         return "Discrete(%d)" % self.n
+
     def __eq__(self, other):
         return self.n == other.n

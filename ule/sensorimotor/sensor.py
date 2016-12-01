@@ -1,5 +1,5 @@
 from ule.spaces import Vector, Image
-import json
+
 
 class Sensor(object):
 
@@ -11,27 +11,27 @@ class Sensor(object):
 
     def name(self):
         return self._name
-    
-    def value(self):
-        return self._value
-    
+
     def space(self):
         return self._space
+
+    def value(self):
+        return self._value
 
     def create_from_json(self, jsonlist):
         self._name = str(jsonlist['name'])
         if jsonlist['type'] == 'vector':
-            min = float(jsonlist['min'])
-            max = float(jsonlist['max'])
+            minval = float(jsonlist['min'])
+            maxval = float(jsonlist['max'])
             size = int(jsonlist['size'])
-            self._space = Vector(min, max, size)
+            self._space = Vector(minval, maxval, size)
         elif jsonlist['type'] == 'camera':
-            min = 0
-            max = 1
+            minval = 0
+            maxval = 1
             width = int(jsonlist['width'])
             heigth = int(jsonlist['heigth'])
             dim = int(jsonlist['channels'])
-            self._space = Image(min,max,(width,heigth,dim))
+            self._space = Image(minval, maxval, (width, heigth, dim))
         else: 
             raise Exception('Unknown sensor type')
         
@@ -39,8 +39,7 @@ class Sensor(object):
         self._value = self._space.from_jsonable(jsonstr)
 
     def __repr__(self):
-        return self._name + ": " + self._space.__repr__() + ' Sensor'
-    def __str__(self):
-        return self._name + ": " + self._space.__repr__() + ' Sensor'
+        return self._name + ": " + str(self._space) + ' Sensor'
 
-        
+    def __str__(self):
+        return self._name + ": " + str(self._space) + ' Sensor'

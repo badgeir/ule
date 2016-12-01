@@ -1,5 +1,5 @@
 from ule.spaces import Vector, Discrete
-import json
+
 
 class Motor(object):
 
@@ -11,7 +11,10 @@ class Motor(object):
 
     def name(self):
         return self._name
-    
+
+    def space(self):
+        return self._space
+
     def value(self):
         return self._value
     
@@ -23,17 +26,14 @@ class Motor(object):
 
     def contains(self, sample):
         return self._space.contains(sample)
-    
-    def space(self):
-        return self._space
 
     def create_from_json(self, jsonlist):
         self._name = str(jsonlist['name'])
         if jsonlist['type'] == 'vector':
-            min = float(jsonlist['min'])
-            max = float(jsonlist['max'])
+            minval = float(jsonlist['min'])
+            maxval = float(jsonlist['max'])
             size = int(jsonlist['size'])
-            self._space = Vector(min, max, size)
+            self._space = Vector(minval, maxval, size)
         elif jsonlist['type'] == 'discrete':
             n = int(jsonlist['range'])
             self._space = Discrete(n)
@@ -41,24 +41,23 @@ class Motor(object):
             raise Exception('Unknown sensor type')
         
     def to_jsonable(self):
-        jsn = {}
-        jsn['name'] = self._name
-        jsn['value'] = self._space.to_jsonable(self._value)
+        jsn = {'name': self._name, 'value': self._space.to_jsonable(self._value)}
         return jsn
 
     def __repr__(self):
-        return self._name + ": " + self._space.__repr__() + ' Motor'
+        return self._name + ": " + str(self._space) + ' Motor'
+
     def __str__(self):
-        return self._name + ": " + self._space.__repr__() + ' Motor'
+        return self._name + ": " + str(self._space) + ' Motor'
 
     def __getitem__(self, idx):
         try:
             return self._value[idx]
         except Exception as e:
-            print self._space.__repr__() + ' Motor does not support indexing'
+            print str(self._space) + ' Motor does not support indexing'
     
-    def __setitem__(self,idx,value):
+    def __setitem__(self, idx, value):
         try:
             self._value[idx] = value
         except Exception as e:
-            print self._space.__repr__() + ' Motor does not support indexing'
+            print str(self._space) + ' Motor does not support indexing'
