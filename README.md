@@ -32,8 +32,7 @@ To connect to the running scene in Unity, write
 
 This will connect to the server running in Unity, and get the environment information for the running scene.
 The main components of the ule interface are *sensors* and *motors*. Every available sensor and motor in the
-Unity scene are available through the environments public variables sensors and motors, which return lists containing
-the scene's sensors and motors.
+Unity scene are available through the environments lists of sensors and motors:
 
 	>>>env.sensors
 	[Ball: Vector3 Sensor, Camera: Image(84L, 84L, 3L) Sensor]
