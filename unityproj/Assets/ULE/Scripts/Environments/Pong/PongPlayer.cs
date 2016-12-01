@@ -17,8 +17,22 @@ public class PongPlayer : DiscreteActionMotor {
         switch(action)
         {
             case 0: break;
-            case 1: transform.Translate(Vector3.up*mSpeed); break;
-            case 2: transform.Translate(-Vector3.up * mSpeed); break;
+            case 1:
+            {
+                if (transform.position.y < 0.47)
+                { 
+                    transform.Translate(Vector3.up * mSpeed); 
+                }
+                break;
+            }
+            case 2:
+            { 
+                if(transform.position.y > -0.47)
+                {
+                    transform.Translate(-Vector3.up * mSpeed); 
+                }
+                break;
+            } 
             default: break;
         }
     }
