@@ -6,7 +6,7 @@ def main():
 
     unity_project_path = "C:\\DeepLearning\\reinforcement\\ule\\unityproj"
     exe_name = "pong"
-    env = ule.Env(unity_project_path=unity_project_path, name=exe_name, port=3002)
+    env = ule.Env(unity_project_path=unity_project_path, name=exe_name, port=3001)
 
     for game in range(5):
         done = 0

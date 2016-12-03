@@ -77,7 +77,8 @@ class Env(object):
     def close(self):
         self.__sock.close()
         self._connected = False
-        self._instance.terminate()
+        if self._instance != None:
+            self._instance.terminate()
 
     @staticmethod
     def seed(seed=None):
