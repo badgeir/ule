@@ -1,44 +1,18 @@
 import socket
 import json
+import subprocess
+import os
 
 from ule.util import jsonparser
-
-
-def load(name='none', connect_to_running=True, port=3000):
-    if not connect_to_running:
-        if start(name, port):
-            print('successfully started environment %s.'%name)
-        else:
-            print('could not start environment %s'%name)
-            return None
-    env = Env(port=port)
-    env.connect()
-    return env
-
-
-def start(name, tcpport):
-    if find_executable(name):
-        return start_executable(name, tcpport)    
-    elif build_executable(name):
-        return start_executable(name, tcpport)
-    return False
-
-
-def start_executable(name, port):
-    return False
-
-
-def find_executable(exe_name):
-    return False
-
-
-def build_executable(exe_name):
-    return False
+import time
 
 
 class Env(object):
-    def __init__(self, host_ip="127.0.0.1", port=3000):
-        self._closed = False
+
+    def __init__(self, unity_project_path='', name='', connect_to_running=False, host_ip="127.0.0.1", port=3000):
+
+        self._unity_path = unity_project_path
+        self._name = name
         
         self.motors = None
         self.sensors = None
@@ -47,11 +21,36 @@ class Env(object):
         self._port = port
 
         self.__sock = None
-    
-    def connect(self):
-        self.__sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.__sock.connect((self._hostIP, self._port))
+        self._connected = False
 
+        self._instance = None
+
+        if not connect_to_running:
+            if self._start_instance():
+                print('successfully started environment %s.' % name)
+            else:
+                print('could not start environment %s' % name)
+        self._connect()
+
+    def _start_instance(self):
+        path_to_exe = os.path.join(self._unity_path, "Deploy", self._name)
+        print("whuuut")
+        print(path_to_exe)
+        self._instance = subprocess.Popen([path_to_exe, '-port=%d' % self._port])
+        if self._instance:
+            return True
+        else:
+            return False
+
+    def _connect(self):
+        self.__sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        while self._connected == False:
+            try:
+                self.__sock.connect((self._hostIP, self._port))
+                self._connected = True
+            except Exception as e:
+                time.sleep(0.5)
+            
         # get environment info
         msg = {"method": "getEnvironmentInfo"}
         self.__sock.send(json.dumps(msg))
@@ -77,9 +76,11 @@ class Env(object):
 
     def close(self):
         self.__sock.close()
-        self._closed = True
+        self._connected = False
+        self._instance.terminate()
 
-    def seed(self, seed=None):
+    @staticmethod
+    def seed(seed=None):
         import ule.spaces
         if seed:
             ule.spaces.seed(seed)

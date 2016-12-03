@@ -1,1 +1,1 @@
-from ule.core import Env, load
+from ule.core import Env
