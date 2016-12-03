@@ -29,7 +29,7 @@ Open up an interactive python shell and import ule:
 
 To connect to the running scene in Unity, write
 	
-	>>>env = ule.load()
+	>>>env = ule.Env(connect_to_running=True)
 
 This will connect to the server running in Unity, and get the environment information for the running scene.
 The main components of the ule interface are *sensors* and *motors*. Every available sensor and motor in the
@@ -96,7 +96,7 @@ The following script plays five consecutive games, and outputs a random motor va
 	import ule
 	
 	def main():
-	    env = ule.load()
+	    env = ule.Env(connect_to_running=True)
 
 	    for game in range(5):
 	        done = 0
