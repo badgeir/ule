@@ -236,7 +236,7 @@ to start the scene. Then open up a python console, and start a ule environment:
 
 	>python
 	>>>import ule
-	>>>env = ule.load()
+	>>>env = ule.Env(connect_to_running=True)
 	>>>env.sensors
 	[Height: Vector1 Sensor]
 	>>>env.motors
