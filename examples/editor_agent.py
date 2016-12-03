@@ -4,7 +4,7 @@ import ule
 
 def main():
 
-    env = ule.Env(connect_to_running=True, port=3003)
+    env = ule.Env(connect_to_running=True, port=3000)
 
     for game in range(5):
         done = 0
