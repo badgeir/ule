@@ -34,8 +34,6 @@ class Env(object):
 
     def _start_instance(self):
         path_to_exe = os.path.join(self._unity_path, "Deploy", self._name)
-        print("whuuut")
-        print(path_to_exe)
         self._instance = subprocess.Popen([path_to_exe, '-port=%d' % self._port])
         if self._instance:
             return True

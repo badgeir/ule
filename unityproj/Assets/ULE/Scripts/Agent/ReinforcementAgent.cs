@@ -103,7 +103,7 @@ public class ReinforcementAgent : MonoBehaviour {
                     Tick();
                 }
 
-                SendFeedback();
+                StartCoroutine(SendFeedback());
 
                 mAccumulatedReward = 0;
                 mMotorsUpdated = false;
@@ -112,8 +112,15 @@ public class ReinforcementAgent : MonoBehaviour {
         }
     }
 
-    public void SendFeedback()
+    IEnumerator SendFeedback()
     {
+        if(mRunMode == RunMode.Discrete)
+        {
+            while(Time.timeScale == 1)
+            {
+                yield return new WaitForSeconds(0.001f);
+            }
+        }
         // Optimization. JSONNode.ToString() used 160 ms when parsing image. By writing out the json string
         // "by hand", I got it down to 2 ms.
         string jsonstring = "{{\"sensors\": [{0}], \"reward\": \"{1}\", \"done\": \"{2}\", \"info\": \"{3}\"}}";
@@ -135,14 +142,13 @@ public class ReinforcementAgent : MonoBehaviour {
 
     void Tick()
     {
-        Time.timeScale = 1;
         StartCoroutine(TickPhysics());
     }
 
     IEnumerator TickPhysics()
     {
+        Time.timeScale = 1;
         yield return new WaitForFixedUpdate();
-
         Time.timeScale = 0;
     }
 
