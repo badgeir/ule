@@ -114,13 +114,14 @@ public class ReinforcementAgent : MonoBehaviour {
 
     IEnumerator SendFeedback()
     {
-        if(mRunMode == RunMode.Discrete)
+        if (mRunMode == RunMode.Discrete)
         {
-            while(Time.timeScale == 1)
+            while (Time.timeScale == 1)
             {
                 yield return new WaitForSeconds(0.001f);
             }
         }
+
         // Optimization. JSONNode.ToString() used 160 ms when parsing image. By writing out the json string
         // "by hand", I got it down to 2 ms.
         string jsonstring = "{{\"sensors\": [{0}], \"reward\": \"{1}\", \"done\": \"{2}\", \"info\": \"{3}\"}}";
@@ -247,7 +248,7 @@ public class ReinforcementAgent : MonoBehaviour {
 
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
 
-        SendFeedback();
+        StartCoroutine(SendFeedback());
     }
 
 }

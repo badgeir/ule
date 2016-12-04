@@ -9,8 +9,17 @@ public class Ball : MonoBehaviour
 
     void Start()
     {
-        mHorizontalSpeed = 0.01f;
-        mVerticalSpeed = 0.01f;
+        int p = UnityEngine.Random.Range(0, 2);
+        if(p == 0)
+        {
+            mHorizontalSpeed = 0.01f;
+        }
+        else
+        {
+            mHorizontalSpeed = -0.01f;
+        }
+
+        mVerticalSpeed = UnityEngine.Random.Range(-0.01f, 0.01f);
     }
 
 	// Ticked on physics update, regardsless of discrete or continuous mode
