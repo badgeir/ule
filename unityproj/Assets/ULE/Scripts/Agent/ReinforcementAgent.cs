@@ -77,7 +77,7 @@ public class ReinforcementAgent : MonoBehaviour {
         mSensors = new List<Sensor>();
         mMotors = new List<Motor>();
 
-        mUleRPC = new UleRPC(OnGetEnvironment, OnUpdateMotor, Reset);
+        mUleRPC = new UleRPC(RPCGetEnvironment, RPCStep, RPCReset, RPCConfig);
 
         mServer = new ULEServer("127.0.0.1", mPort);
         mServer.Connect(OnClientConnected);
@@ -204,7 +204,7 @@ public class ReinforcementAgent : MonoBehaviour {
     /***************************************************
      * UleRPC Callback functions
      **************************************************/
-    public void OnGetEnvironment()
+    public void RPCGetEnvironment()
     {
         JSONClass json = new JSONClass();
 
@@ -223,20 +223,25 @@ public class ReinforcementAgent : MonoBehaviour {
         mServer.SendJson(json);
     }
 
-    public void OnUpdateMotor(JSONNode motor)
+    public void RPCStep(JSONNode parameters)
     {
-        foreach (Motor m in mMotors)
+        // Update motor outputs
+        JSONNode motors = parameters["motors"];
+        for (int current = 0; current < motors.Count; current++)
         {
-            string name = motor["name"];
-            if (m.name() == name)
+            foreach (Motor m in mMotors)
             {
-                mMotorsUpdated = true;
-                m.PushJson(motor);
+                string name = motors[current]["name"];
+                if (m.name() == name)
+                {
+                    m.PushJson(motors[current]);
+                }
             }
         }
+        mMotorsUpdated = true;
     }
 
-    public void Reset()
+    public void RPCReset()
     {
         mGameStatus = GameStatus.StatusOK;
         mAccumulatedReward = 0;
@@ -249,6 +254,15 @@ public class ReinforcementAgent : MonoBehaviour {
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
 
         StartCoroutine(SendFeedback());
+    }
+
+    public void RPCConfig(JSONNode config)
+    {
+        if(config["fps"] != null)
+        {
+            Application.targetFrameRate = config["fps"].AsInt;
+            config.Remove("fps");
+        }
     }
 
 }

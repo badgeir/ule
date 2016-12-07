@@ -11,14 +11,16 @@ namespace ULE
     class UleRPC
     {
 
-        Action mOnGetEnvironment, mReset;
-        Action<JSONNode> mMotorUpdater;
+        Action mRPCGetEnvironment, mRPCReset;
+        Action<JSONNode> mRPCStep, mRPCConfig;
 
-        public UleRPC(Action onGetEnvironment, Action<JSONNode> motorUpdater, Action reset)
+        public UleRPC(Action getEnvironment, Action<JSONNode> step, Action reset, Action<JSONNode> config)
         {
-            mOnGetEnvironment = onGetEnvironment;
-            mMotorUpdater = motorUpdater;
-            mReset = reset;
+            mRPCGetEnvironment = getEnvironment;
+            mRPCStep = step;
+            mRPCReset = reset;
+            mRPCConfig = config;
+
         }
 
         public void ParseInput(string jsonstring)
@@ -28,35 +30,30 @@ namespace ULE
 
             switch (methodname)
             {
-                case "getEnvironmentInfo":
+                case "env":
                     {
-                        mOnGetEnvironment();
+                        mRPCGetEnvironment();
                         break;
                     }
 
-                case "updateEnvironment":
+                case "step":
                     {
-                        JSONNode parameters = Json["parameters"];
-                        updateEnvironment(parameters);
+                        mRPCStep(Json["parameters"]);
                         break;
                     }
                 case "reset":
                     {
-                        mReset();
+                        mRPCReset();
+                        break;
+                    }
+                case "config":
+                    {
+                        mRPCConfig(Json["parameters"]);
                         break;
                     }
                 default: break;
             }
         }
-
-        void updateEnvironment(JSONNode json)
-        {
-            for (int motor = 0; motor < json["motors"].Count; motor++)
-            {
-                mMotorUpdater(json["motors"][motor]);
-            }
-        }
-
 
     }
 

@@ -47,15 +47,10 @@ def parseSensorsAndMotors(info):
     
     return sensors, motors
 
-def motorsToJson(motors):
-    jmsg = {}
-
-    jmsg['method'] = 'updateEnvironment'
-    jmsg['parameters'] = {}
-    jmsg['parameters']['motors'] = []
-
+def motorsToJsonable(motors):
+    motorlist = []
     for i in range(len(motors)):
-        motorstr = motors[i].to_jsonable()
-        jmsg['parameters']['motors'].append(motorstr)
+        current = motors[i].to_jsonable()
+        motorlist.append(current)
     
-    return json.dumps(jmsg)
+    return motorlist

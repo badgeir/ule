@@ -4,12 +4,17 @@ import subprocess
 import os
 
 from ule.util import jsonparser
-import time
 
+import time
+import logging
 
 class Env(object):
 
     def __init__(self, unity_project_path='', name='', connect_to_running=False, host_ip="127.0.0.1", port=3000):
+
+        logging.basicConfig(filename='ule_log.txt', level=logging.DEBUG)
+        self._log = logging.getLogger(__name__)
+        self._log.debug('Initializing Environment.')
 
         self._unity_path = unity_project_path
         self._name = name
@@ -27,20 +32,23 @@ class Env(object):
 
         if not connect_to_running:
             if self._start_instance():
-                print('successfully started environment %s.' % name)
+                self._log.debug('successfully started environment %s.' % name)
             else:
-                print('could not start environment %s' % name)
+                self._log.debug('could not start environment %s' % name)
         self._connect()
 
     def _start_instance(self):
         path_to_exe = os.path.join(self._unity_path, "Deploy", self._name)
         self._instance = subprocess.Popen([path_to_exe, '-port=%d' % self._port])
         if self._instance:
+            self._log.debug('Started exe %s'%self._name)
             return True
         else:
+            self._log.debug('Failed to start exe %s'%self._name)
             return False
 
     def _connect(self):
+        self._log.debug('Connecting to ULE server...')
         self.__sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         while self._connected == False:
             try:
@@ -50,29 +58,39 @@ class Env(object):
                 time.sleep(0.5)
             
         # get environment info
-        msg = {"method": "getEnvironmentInfo"}
+        self._log.debug('Getting environment info.')
+        msg = {"method": "env"}
         self.__sock.send(json.dumps(msg))
         info = self.__sock.recv(16384)
 
         self.sensors, self.motors = jsonparser.parseSensorsAndMotors(info)
 
     def step(self):
-        # send action
-        jsonmotors = jsonparser.motorsToJson(self.motors)
-        self.__sock.send(jsonmotors)
+        self._log.debug('stepping')
+        # send and receive environment update
+        rpc = {}
+        rpc['method'] = 'step'
+        rpc['parameters'] = {}
+        rpc['parameters']['motors'] = jsonparser.motorsToJsonable(self.motors)
+        self.__sock.send(json.dumps(rpc))
 
         # receive sensor, reward and other info from unity environment
         feedback = self.__sock.recv(16384)
+        self._log.debug('reveived environment update.')
         reward, done, info = jsonparser.parseFeedback(feedback, self.sensors)
+        self._log.debug('parsed environment feedback.')
         return reward, done, info
 
     def reset(self):
+        self._log.debug('resetting environment.')
         reset = {'method': 'reset'}
         self.__sock.send(json.dumps(reset))
         feedback = self.__sock.recv(16384)
         jsonparser.parseFeedback(feedback, self.sensors)
+        self._log.debug('Environment reset.')
 
     def close(self):
+        self._log.debug('closing environment.')
         self.__sock.close()
         self._connected = False
         if self._instance != None:
