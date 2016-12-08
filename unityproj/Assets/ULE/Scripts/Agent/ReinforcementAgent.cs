@@ -31,6 +31,13 @@ public class ReinforcementAgent : MonoBehaviour {
 
     void Awake()
     {
+        mRunMode = RunMode.Discrete;
+
+        if (mRunMode == RunMode.Discrete)
+        {
+            Time.timeScale = 0;
+        }
+
         mPort = 3000;
         string[] args =  System.Environment.GetCommandLineArgs();
         foreach(string arg in args)
@@ -63,14 +70,6 @@ public class ReinforcementAgent : MonoBehaviour {
             Destroy(gameObject);
         }
 
-
-        mRunMode = RunMode.Discrete;
-
-        if(mRunMode == RunMode.Discrete)
-        {
-            Time.timeScale = 0;
-        }
-
         mGameStatus = GameStatus.StatusOK;
         mAccumulatedReward = 0;
 
@@ -92,35 +91,38 @@ public class ReinforcementAgent : MonoBehaviour {
     {
         if (mPendingMessages.Count > 0)
         {
+            // Debug.Log(mPort + " Update");
             // parse message from client
             mUleRPC.ParseInput(mPendingMessages.Dequeue());
 
             if (mMotorsUpdated)
             {
+                // Debug.Log(mPort + " Motors updated");
+
                 // if runmode is discrete, step environment one physics step
                 if(mRunMode == RunMode.Discrete)
                 {
-                    Tick();
+                    // tick physics one step
+                    // timescale is set to zero again after feedback has been sent
+                    Time.timeScale = 1;
                 }
-
-                StartCoroutine(SendFeedback());
-
-                mAccumulatedReward = 0;
-                mMotorsUpdated = false;
             }
 
         }
     }
 
-    IEnumerator SendFeedback()
+    void FixedUpdate()
     {
-        if (mRunMode == RunMode.Discrete)
+        if(mMotorsUpdated)
         {
-            while (Time.timeScale == 1)
-            {
-                yield return new WaitForSeconds(0.001f);
-            }
+            SendFeedback();
         }
+        Time.timeScale = 0;
+    }
+
+    void SendFeedback()
+    {
+        // Debug.Log(mPort + " SendFeedback");
 
         // Optimization. JSONNode.ToString() used 160 ms when parsing image. By writing out the json string
         // "by hand", I got it down to 2 ms.
@@ -139,18 +141,9 @@ public class ReinforcementAgent : MonoBehaviour {
 
         string output = string.Format(jsonstring, sensors, mAccumulatedReward, (int)mGameStatus, info);
         mServer.SendResponse(output);
-    }
 
-    void Tick()
-    {
-        StartCoroutine(TickPhysics());
-    }
-
-    IEnumerator TickPhysics()
-    {
-        Time.timeScale = 1;
-        yield return new WaitForFixedUpdate();
-        Time.timeScale = 0;
+        mAccumulatedReward = 0;
+        mMotorsUpdated = false;
     }
 
     public void AddReward(float reward)
@@ -198,6 +191,7 @@ public class ReinforcementAgent : MonoBehaviour {
 
     public void OnClientRequest(string msg)
     {
+        // Debug.Log(mPort + " OnClientRequest");
         mPendingMessages.Enqueue(msg);
     }
 
@@ -225,6 +219,7 @@ public class ReinforcementAgent : MonoBehaviour {
 
     public void RPCStep(JSONNode parameters)
     {
+        // Debug.Log(mPort + " Step");
         // Update motor outputs
         JSONNode motors = parameters["motors"];
         for (int current = 0; current < motors.Count; current++)
@@ -253,7 +248,7 @@ public class ReinforcementAgent : MonoBehaviour {
 
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
 
-        StartCoroutine(SendFeedback());
+        SendFeedback();
     }
 
     public void RPCConfig(JSONNode config)

@@ -74,6 +74,7 @@ class Env(object):
         rpc['parameters']['motors'] = jsonparser.motorsToJsonable(self.motors)
         self.__sock.send(json.dumps(rpc))
 
+        self._log.debug('sent update')
         # receive sensor, reward and other info from unity environment
         feedback = self.__sock.recv(16384)
         self._log.debug('reveived environment update.')
