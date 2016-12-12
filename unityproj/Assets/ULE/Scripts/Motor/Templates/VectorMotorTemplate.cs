@@ -10,6 +10,8 @@ public class VectorMotorTemplate : VectorMotor {
         mLength = 3;
         mMinVal = -1;
         mMaxVal = 1;
+		
+	base.Init();
 	}
 	
     // Called when a new action is received
