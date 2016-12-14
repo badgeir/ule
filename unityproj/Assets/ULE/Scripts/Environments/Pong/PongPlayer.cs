@@ -19,7 +19,7 @@ public class PongPlayer : DiscreteActionMotor {
             case 0: break;
             case 1:
             {
-                if (transform.position.y < 0.47)
+                if (transform.position.y < 1.43)
                 { 
                     transform.Translate(Vector3.up * mSpeed); 
                 }
@@ -27,7 +27,7 @@ public class PongPlayer : DiscreteActionMotor {
             }
             case 2:
             { 
-                if(transform.position.y > -0.47)
+                if(transform.position.y > -1.43)
                 {
                     transform.Translate(-Vector3.up * mSpeed); 
                 }

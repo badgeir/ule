@@ -7,25 +7,33 @@ public class Ball : MonoBehaviour
     private float mHorizontalSpeed;
     private float mVerticalSpeed;
 
+    ReinforcementAgent mAgent;
+
     void Start()
     {
+        mAgent = GameObject.Find("Agent").GetComponent<ReinforcementAgent>();
+
         int p = UnityEngine.Random.Range(0, 2);
         if(p == 0)
         {
-            mHorizontalSpeed = 0.01f;
+            mHorizontalSpeed = 0.02f;
         }
         else
         {
-            mHorizontalSpeed = -0.01f;
+            mHorizontalSpeed = -0.02f;
         }
 
-        mVerticalSpeed = UnityEngine.Random.Range(-0.01f, 0.01f);
+        mVerticalSpeed = UnityEngine.Random.Range(-0.02f, 0.02f);
     }
 
 	// Ticked on physics update, regardsless of discrete or continuous mode
 	void FixedUpdate()
     {
         transform.Translate((Vector3.right * mHorizontalSpeed + Vector3.up*mVerticalSpeed));
+        if (transform.position.y < -2 || transform.position.y > 2)
+        {
+            mAgent.GameOver();
+        }
 	}
 
     void OnTriggerEnter(Collider col)
@@ -34,13 +42,12 @@ public class Ball : MonoBehaviour
         {
             case "Player":
                 {
-                    ReinforcementAgent agent = GameObject.Find("Agent").GetComponent<ReinforcementAgent>();
-                    agent.AddReward(1);
+                    mAgent.AddReward(1);
                     mHorizontalSpeed = -mHorizontalSpeed;
 
                     //calculate vertical speed:
                     float diff = transform.position.y - col.transform.position.y;
-                    mVerticalSpeed += diff/2;
+                    mVerticalSpeed += diff/10;
                     if(mVerticalSpeed > 0.025)
                     {
                         mVerticalSpeed = 0.025f;
@@ -74,16 +81,14 @@ public class Ball : MonoBehaviour
                 break;
             case "Back":
                 {
-                    ReinforcementAgent agent = GameObject.Find("Agent").GetComponent<ReinforcementAgent>();
-                    agent.AddReward(-1);
-                    agent.GameOver();
+                    mAgent.AddReward(-1);
+                    mAgent.GameOver();
                     break;
                 }
             case "Front":
                 {
-                    ReinforcementAgent agent = GameObject.Find("Agent").GetComponent<ReinforcementAgent>();
-                    agent.AddReward(1);
-                    agent.GameOver();
+                    mAgent.AddReward(1);
+                    mAgent.GameOver();
                     break;
                 }
             default: break;

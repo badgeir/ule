@@ -6,6 +6,15 @@ public class PongOpponent : MonoBehaviour {
     public Transform mBall;
 	
 	void FixedUpdate () {
-        transform.position = new Vector3(transform.position.x, Vector3.Lerp(transform.position, mBall.position,0.1f).y, transform.position.z);
+        float ballY = mBall.position.y;
+        if(ballY > 1.43)
+        {
+            ballY = 1.43f; 
+        }
+        else if(ballY < -1.43)
+        {
+            ballY = -1.43f;
+        }
+        transform.position = new Vector3(transform.position.x, Mathf.Lerp(transform.position.y, ballY, 0.1f), transform.position.z);
 	}
 }
