@@ -16,11 +16,11 @@ public class Ball : MonoBehaviour
         int p = UnityEngine.Random.Range(0, 2);
         if(p == 0)
         {
-            mHorizontalSpeed = 0.02f;
+            mHorizontalSpeed = 0.05f;
         }
         else
         {
-            mHorizontalSpeed = -0.02f;
+            mHorizontalSpeed = -0.05f;
         }
 
         mVerticalSpeed = UnityEngine.Random.Range(-0.02f, 0.02f);
@@ -47,14 +47,14 @@ public class Ball : MonoBehaviour
 
                     //calculate vertical speed:
                     float diff = transform.position.y - col.transform.position.y;
-                    mVerticalSpeed += diff/10;
-                    if(mVerticalSpeed > 0.025)
+                    mVerticalSpeed += diff/6;
+                    if(mVerticalSpeed > 0.05)
                     {
-                        mVerticalSpeed = 0.025f;
+                        mVerticalSpeed = 0.05f;
                     }
-                    else if(mVerticalSpeed < -0.025)
+                    else if(mVerticalSpeed < -0.05)
                     {
-                        mVerticalSpeed = -0.025f;
+                        mVerticalSpeed = -0.05f;
                     }
 
                     break;

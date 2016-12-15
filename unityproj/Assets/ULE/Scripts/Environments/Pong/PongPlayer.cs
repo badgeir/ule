@@ -14,25 +14,25 @@ public class PongPlayer : DiscreteActionMotor {
     
     protected override void Act(int action)
     {
-        switch(action)
+        switch (action)
         {
             case 0: break;
             case 1:
-            {
-                if (transform.position.y < 1.43)
-                { 
-                    transform.Translate(Vector3.up * mSpeed); 
-                }
-                break;
-            }
-            case 2:
-            { 
-                if(transform.position.y > -1.43)
                 {
-                    transform.Translate(-Vector3.up * mSpeed); 
+                    if (transform.position.y < 1.43)
+                    {
+                        transform.Translate(Vector3.up * mSpeed);
+                    }
+                    break;
                 }
-                break;
-            } 
+            case 2:
+                {
+                    if (transform.position.y > -1.43)
+                    {
+                        transform.Translate(-Vector3.up * mSpeed);
+                    }
+                    break;
+                }
             default: break;
         }
     }

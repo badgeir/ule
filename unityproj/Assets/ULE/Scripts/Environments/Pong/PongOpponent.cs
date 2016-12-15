@@ -15,6 +15,6 @@ public class PongOpponent : MonoBehaviour {
         {
             ballY = -1.43f;
         }
-        transform.position = new Vector3(transform.position.x, Mathf.Lerp(transform.position.y, ballY, 0.1f), transform.position.z);
+        transform.position = new Vector3(transform.position.x, Mathf.Lerp(transform.position.y, ballY, 0.2f), transform.position.z);
 	}
 }
