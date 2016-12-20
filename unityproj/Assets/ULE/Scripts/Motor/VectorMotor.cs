@@ -39,8 +39,8 @@ namespace ULE
                     for (int i = 0; i < mLength; i++ )
                     {
                         vec[i] = value[i].AsFloat;
-                        Act(vec);
                     }
+                    Act(vec);
                 }
                 catch
                 {
