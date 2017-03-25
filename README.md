@@ -10,6 +10,7 @@ The software is under development and should in its current state be considered 
 ### Prerequisites
 ULE requires an installation of Unity 5 and a scientific Python distrition in order to run.
 It has been tested to work with Anaconda python 2.7 and 3.5 64 bit versions.
+Other versions might work with none to minimal changes to the source.
 
 ### Setting up ULE
 
