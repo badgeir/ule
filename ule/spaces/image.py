@@ -8,6 +8,9 @@ from ule.spaces.space import Space
 import io
 from matplotlib import image as mpimg
 
+import base64
+
+
 class Image(Space):
     """
     A box in R^n.
@@ -43,7 +46,7 @@ class Image(Space):
         return np.array(sample_n).tolist()
 
     def from_jsonable(self, sample_n):
-        imgbytes = sample_n.decode('base64')
+        imgbytes = base64.b64decode(sample_n)
         img = None
         try:
             img = mpimg.imread(io.BytesIO(imgbytes))

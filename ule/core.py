@@ -2,11 +2,13 @@ import socket
 import json
 import subprocess
 import os
+import sys
 
 from ule.util import jsonparser
 
 import time
 import logging
+
 
 class Env(object):
 
@@ -18,7 +20,7 @@ class Env(object):
 
         self._unity_path = unity_project_path
         self._name = name
-        
+
         self.motors = None
         self.sensors = None
 
@@ -56,12 +58,12 @@ class Env(object):
                 self._connected = True
             except Exception as e:
                 time.sleep(0.5)
-            
+
         # get environment info
         self._log.debug('Getting environment info.')
         msg = {"method": "env"}
-        self.__sock.send(json.dumps(msg))
-        info = self.__sock.recv(16384)
+        self.__sock.send(json.dumps(msg).encode('utf-8'))
+        info = self.__sock.recv(16384).decode('utf-8')
 
         self.sensors, self.motors = jsonparser.parseSensorsAndMotors(info)
 
@@ -72,11 +74,11 @@ class Env(object):
         rpc['method'] = 'step'
         rpc['parameters'] = {}
         rpc['parameters']['motors'] = jsonparser.motorsToJsonable(self.motors)
-        self.__sock.send(json.dumps(rpc))
+        self.__sock.send(json.dumps(rpc).encode('utf-8'))
 
         self._log.debug('sent update')
         # receive sensor, reward and other info from unity environment
-        feedback = self.__sock.recv(16384)
+        feedback = self.__sock.recv(16384).decode('utf-8')
         self._log.debug('reveived environment update.')
         reward, done, info = jsonparser.parseFeedback(feedback, self.sensors)
         self._log.debug('parsed environment feedback.')
@@ -85,8 +87,8 @@ class Env(object):
     def reset(self):
         self._log.debug('resetting environment.')
         reset = {'method': 'reset'}
-        self.__sock.send(json.dumps(reset))
-        feedback = self.__sock.recv(16384)
+        self.__sock.send(json.dumps(reset).encode('utf-8'))
+        feedback = self.__sock.recv(16384).decode('utf-8')
         jsonparser.parseFeedback(feedback, self.sensors)
         self._log.debug('Environment reset.')
 
