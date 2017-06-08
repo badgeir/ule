@@ -119,7 +119,11 @@ The following script plays five consecutive games, and outputs a random motor va
 	
 	if __name__ == '__main__':
 	    main()
-	
+
+### An example DQN agent using OpenAI Baselines
+
+See examples/baselines_dqn.py for a demo of using OpenAIs baselines DQN agent.
+(Installation of [baselines](https://github.com/openai/baselines) is required.)
 
 ## Setting up a new scene
 
