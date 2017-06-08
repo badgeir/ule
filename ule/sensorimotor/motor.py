@@ -17,9 +17,9 @@ class Motor(object):
 
     def value(self):
         return self._value
-    
+
     def set_value(self, value):
-        self._value = value
+        self._value = int(value)
 
     def randomize(self):
         self._value = self._space.sample()
@@ -39,7 +39,7 @@ class Motor(object):
             self._space = Discrete(n)
         else: 
             raise Exception('Unknown sensor type')
-        
+
     def to_jsonable(self):
         jsn = {'name': self._name, 'value': self._space.to_jsonable(self._value)}
         return jsn

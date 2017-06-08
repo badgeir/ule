@@ -32,7 +32,7 @@ class Image(Space):
             assert np.isscalar(low) and np.isscalar(high)
             self.__low = low + np.zeros(shape)
             self.__high = high + np.zeros(shape)
-    
+
     def zeros(self):
         return np.zeros(self.shape)
 

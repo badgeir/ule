@@ -4,17 +4,17 @@ using System.Collections;
 public class PongOpponent : MonoBehaviour {
 
     public Transform mBall;
-	
-	void FixedUpdate () {
-        float ballY = mBall.position.y;
-        if(ballY > 1.43)
+    
+    void FixedUpdate () {
+        float targetY = mBall.position.y + UnityEngine.Random.Range(-0.3f, 0.3f);
+        if (targetY > 1.43)
         {
-            ballY = 1.43f; 
+            targetY = 1.43f; 
         }
-        else if(ballY < -1.43)
+        else if(targetY < -1.43)
         {
-            ballY = -1.43f;
+            targetY = -1.43f;
         }
-        transform.position = new Vector3(transform.position.x, Mathf.Lerp(transform.position.y, ballY, 0.2f), transform.position.z);
-	}
+        transform.position = new Vector3(transform.position.x, Mathf.Lerp(transform.position.y, targetY, 0.2f), transform.position.z);
+    }
 }

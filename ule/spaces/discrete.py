@@ -31,7 +31,7 @@ class Discrete(Space):
         return 0 <= as_int < self.n
 
     def to_jsonable(self, sample_n):
-        return sample_n
+        return int(sample_n)
 
     def from_jsonable(self, sample_n):
         pass
