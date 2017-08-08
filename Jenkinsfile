@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                C:/Anaconda3/python tests/run_all.py
+                bat 'C:/Anaconda3/python tests/run_all.py'
         }
     }
 }
